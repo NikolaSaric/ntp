@@ -1,0 +1,15 @@
+.buttonRight{
+    float: right;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+table {
+    width: 100%;
+  }
+tr{
+    padding: 5px;
+}
+.center{
+    margin-left: 50%;
+    margin-right: 50%;
+}
