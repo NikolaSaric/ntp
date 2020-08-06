@@ -17,16 +17,19 @@ Nakon uspešnog prijavljivanja korisniku se generiše JWT token, koji se koristi
 2) Post Servis - GoLang mikroservis, MongoDB baza podataka. Servis za postavljanje i dobavljanje korisničkih objava.
 Korisnička objava može sadržati naslov, jednu od ponuđenih kategorija, tagove, deskripciju, listu instrumenata, i jedan od sledećih fajlova
 video, audio, sliku ili link. 
-Post servis sadrži i metode za pretragu objava, po raznim kriterijumima.
 
-3) Comment Servis - Servis za čuvanje i dobavljanje komentara, svaka objava može imati komentar, sem ako autor to nije eksplicitno zabranio.
+3) Search Posts Servis - Python + Flast mikroservis aplikacija za pretragu korisničkih objava. Povezuje se na istu MongoDB bazu podataka kao i Post Servis
+i samo vrši pretragu po raznim kriterijumima, uz primenu paginacije. Odlučio sam se da pretragu odradim u Python-u jer je za razliku od GoLang-a dosta kraća, čitkija 
+i jednostavnija sintaksa za pretragu.
+
+4) Comment Servis - Servis za čuvanje i dobavljanje komentara, svaka objava može imati komentar, sem ako autor to nije eksplicitno zabranio.
 Komentar može imati svoje komentare. Komentar može sadržati tekst ili link ka drugoj objavi.
 
-4) Follow Servis - Servis za čuvanje praćenih korisnika. - jos nije detaljno razrađen, možda bude sklopljen sa User Servisom.
+5) Follow Servis - Servis za čuvanje praćenih korisnika. - jos nije detaljno razrađen, možda bude sklopljen sa User Servisom.
 
-5) Reaction Servis - Servis za čuvanje reakcija na objave - još nije detaljno razrađen, možda bude sklopljen sa Post Servisom.
+6) Reaction Servis - Servis za čuvanje reakcija na objave - još nije detaljno razrađen, možda bude sklopljen sa Post Servisom.
 
-6) Streaming Servis - GoLang aplikacija za stream-ovanje video i audio zapisa skladištenih na serverskoj mašini.
+7) Streaming Servis - GoLang aplikacija za stream-ovanje video i audio zapisa skladištenih na serverskoj mašini.
 
 Ostali servisi biće naknadno dodati i detaljno opisani, kao i način pokretanja projekta.
 
