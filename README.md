@@ -26,6 +26,8 @@ Komentar može imati svoje komentare. Komentar može sadržati tekst ili link ka
 
 5) Reaction Servis - Servis za čuvanje reakcija na objave - još nije detaljno razrađen, možda bude sklopljen sa Post Servisom.
 
+6) Streaming Servis - GoLang aplikacija za stream-ovanje video i audio zapisa skladištenih na serverskoj mašini.
+
 Ostali servisi biće naknadno dodati i detaljno opisani, kao i način pokretanja projekta.
 
 # Osnovne funkcionalnosti koje planiram da implementiram:
