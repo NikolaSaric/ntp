@@ -19,6 +19,7 @@ type Post struct {
 	Description string   `json:"description"`
 	Categories  []string `json:"categories"`
 	Links       []string `json:"links"`
+	Tags        []string `json:"tags"`
 	CreatedOn   string   `json:"createdOn"`
 	ModifiedOn  string   `json:"-"`
 	DeletedOn   string   `json:"-"`

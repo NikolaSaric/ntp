@@ -11,6 +11,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material/material.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { HomeComponent } from './home/home.component';
+import { PostComponent } from './post/post.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { AddPostComponent } from './add-post/add-post.component';
 
 
 @NgModule({
@@ -19,6 +23,10 @@ import { HttpClientModule } from '@angular/common/http';
     LogInComponent,
     RegisterComponent,
     NavbarComponent,
+    HomeComponent,
+    PostComponent,
+    UserProfileComponent,
+    AddPostComponent,
   ],
   imports: [
     BrowserModule,

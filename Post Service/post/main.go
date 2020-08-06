@@ -10,6 +10,7 @@ import (
 
 	"github.com/NikolaSaric/ntp/Post_Service/data"
 	"github.com/NikolaSaric/ntp/Post_Service/handlers"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -23,12 +24,22 @@ func main() {
 
 	// create a new serve mux and register the handlers
 	sm := http.NewServeMux()
-	sm.Handle("/", ph)
+	sm.Handle("/post/api/", ph)
+
+	// CORS
+	cf := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:4200"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Jwt", "Page", "PerPage", "Content-Type"},
+		AllowCredentials: true,
+		// Enable Debugging for testing, consider disabling in production
+		Debug: true,
+	})
 
 	// create a new server
 	s := http.Server{
 		Addr:         ":8081",           // configure the bind address
-		Handler:      sm,                // set the default handler
+		Handler:      cf.Handler(sm),    // set the default handler
 		ErrorLog:     l,                 // set the logger for the server
 		ReadTimeout:  5 * time.Second,   // max time to read request from the client
 		WriteTimeout: 10 * time.Second,  // max time to write response to the client
