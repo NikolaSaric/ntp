@@ -17,7 +17,7 @@ export class PostService {
       perPage
     });
 
-    return this.http.get<Post[]>(this.constants.postPort + '/post/api/', { headers });
+    return this.http.get<Post[]>(this.constants.searchPostPort + '/post/api/', { headers });
   }
 
   public addPost(post: Post): Observable<Post> {

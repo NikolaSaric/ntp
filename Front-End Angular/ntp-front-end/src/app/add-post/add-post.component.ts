@@ -13,57 +13,72 @@ import { PostService } from '../services/post.service';
 })
 export class AddPostComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder,private snackBar: MatSnackBar,
+  constructor(private formBuilder: FormBuilder, private snackBar: MatSnackBar,
               private router: Router, private postService: PostService) { }
 
-    addPostForm: FormGroup;
+  addPostForm: FormGroup;
+  categories = ['Improve', 'Song', 'Lesson', 'Challenge', 'Discussion'];
+  types = ['Audio', 'Video', 'Text', 'Image', 'Link'];
 
   ngOnInit() {
     this.addPostForm = this.formBuilder.group({
-      name: ['', [Validators.required]],
+      title: ['', [Validators.required]],
+      category: ['', [Validators.required]],
+      type: ['', [Validators.required]],
+      location: ['', [Validators.required]],
       tags: this.formBuilder.array([
         new FormControl()
       ]),
-      links: this.formBuilder.array([
+      instruments: this.formBuilder.array([
         new FormControl()
       ]),
       description: ['', [Validators.maxLength(250)]]
     });
   }
 
-addTag() {
-  const control = this.addPostForm.controls.tags as FormArray;
-  control.push(new FormControl());
-}
+  addTag() {
+    const control = this.addPostForm.controls.tags as FormArray;
+    control.push(new FormControl());
+  }
 
-removeTag(index: number) {
-  const control = this.addPostForm.controls.tags as FormArray;
-  control.removeAt(index);
-}
+  removeTag(index: number) {
+    const control = this.addPostForm.controls.tags as FormArray;
+    control.removeAt(index);
+  }
 
-addLink() {
-  const control = this.addPostForm.controls.links as FormArray;
-  control.push(new FormControl());
-}
+  addInstrument() {
+    const control = this.addPostForm.controls.instruments as FormArray;
+    control.push(new FormControl());
+  }
 
-removeLink(index: number) {
-  const control = this.addPostForm.controls.links as FormArray;
-  control.removeAt(index);
-}
+  removeInstrument(index: number) {
+    const control = this.addPostForm.controls.instruments as FormArray;
+    control.removeAt(index);
+  }
 
-get name() { return this.addPostForm.controls.name.value as string; }
-get links() { return this.addPostForm.controls.links.value as string[]; }
-get tags() { return this.addPostForm.controls.tags.value as string[]; }
-get description() { return this.addPostForm.controls.description.value as string; }
+  get title() { return this.addPostForm.controls.title.value as string; }
+  get category() { return this.addPostForm.controls.category.value as string; }
+  get type() { return this.addPostForm.controls.type.value as string; }
+  get location() { return this.addPostForm.controls.location.value as string; }
+  get instruments() { return this.addPostForm.controls.instruments.value as string[]; }
+  get tags() { return this.addPostForm.controls.tags.value as string[]; }
+  get description() { return this.addPostForm.controls.description.value as string; }
 
-onAddPostSubmit() {
-  const newPost = new Post(this.name, this.description, this.links, this.tags);
+  checkType() {
+    if (this.type === 'Link') {
+      return true;
+    }
+  }
 
-  this.postService.addPost(newPost).subscribe(
-    (response => {
-      console.log(response);
-    })
-  );
-}
+  onAddPostSubmit() {
+    const newPost = new Post(this.title, this.category, this.description, this.type, this.location, this.instruments, this.tags);
+  
+    this.postService.addPost(newPost).subscribe(
+      (response => {
+        console.log(response);
+        this.snackBar.open('Successfully added new post.');
+      })
+    );
+  }
 
 }

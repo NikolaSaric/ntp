@@ -7,6 +7,7 @@ import (
 
 	mongopagination "github.com/gobeam/mongo-go-pagination"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -15,14 +16,14 @@ import (
 type Post struct {
 	ID          string   `json:"id"`
 	Username    string   `json:"username"`
-	Name        string   `json:"name"`
+	Title       string   `json:"title"`
 	Description string   `json:"description"`
-	Categories  []string `json:"categories"`
-	Links       []string `json:"links"`
+	Category    string   `json:"category"`
+	Type        string   `json:"type"`
+	Location    string   `json:"location"`
+	Instruments []string `json:"instruments"`
 	Tags        []string `json:"tags"`
 	CreatedOn   string   `json:"createdOn"`
-	ModifiedOn  string   `json:"-"`
-	DeletedOn   string   `json:"-"`
 }
 
 var collection *mongo.Collection
@@ -54,6 +55,19 @@ func InitDatabase() {
 func Save(post *Post) *mongo.InsertOneResult {
 
 	insertResult, err := collection.InsertOne(context.TODO(), post)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	post.ID = insertResult.InsertedID.(primitive.ObjectID).Hex()
+
+	_, err = collection.UpdateOne(
+		context.TODO(),
+		bson.M{"_id": insertResult.InsertedID.(primitive.ObjectID)},
+		bson.D{
+			{"$set", post},
+		},
+	)
 
 	if err != nil {
 		log.Fatal(err)

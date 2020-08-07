@@ -10,8 +10,8 @@ export class HomeComponent implements OnInit {
 
   constructor(private postService: PostService) { }
 
-  page = 1;
-  perPage = 3;
+  page = 0;
+  perPage = 1;
 
   ngOnInit() {
     this.getAllPosts();

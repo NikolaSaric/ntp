@@ -109,9 +109,7 @@ func (p *Posts) addPost(rw http.ResponseWriter, r *http.Request) {
 
 	newPost.Username = claims["username"].(string)
 	newPost.CreatedOn = time.Now().UTC().String()
-
 	newPost.ID = data.Save(&newPost).InsertedID.(primitive.ObjectID).Hex()
-
 	encoder := json.NewEncoder(rw)
 
 	err = encoder.Encode(newPost)

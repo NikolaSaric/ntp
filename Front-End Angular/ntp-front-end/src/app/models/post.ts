@@ -1,18 +1,24 @@
 export class Post {
 
-    constructor(name: string, description: string, links: string[], tags: string[]) {
-        this.name = name;
+    constructor(title: string, category: string, description: string, type: string,
+                location: string, instruments: string[], tags: string[]) {
+        this.title = title;
+        this.category = category;
         this.description = description;
-        this.links = links;
+        this.type = type;
+        this.location = location;
+        this.instruments = instruments;
         this.tags = tags;
     }
 
     id: string;
     username: string;
-    name: string;
+    title: string;
+    category: string;
     description: string;
-    categories: string[];
-    links: string[];
+    type: string;
+    location: string;
+    instruments: string[];
     tags: string[];
     createdOn: string;
 }
