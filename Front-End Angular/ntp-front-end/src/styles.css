@@ -92,3 +92,10 @@ body {
     cursor: pointer;
     text-decoration: underline;
 }
+
+.center {
+    margin: auto;
+    width: 30%;
+    border: 3px;
+    padding: 10px;
+  }

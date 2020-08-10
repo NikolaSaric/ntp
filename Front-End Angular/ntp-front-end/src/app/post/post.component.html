@@ -1,1 +1,18 @@
-<p>post works!</p>
+<mat-card class="post-card mat-card-cvr" >
+    <mat-card-header>
+      <mat-card-title>{{post.title}}</mat-card-title>
+      <mat-card-subtitle>{{post.username}} | {{formatTags()}}</mat-card-subtitle>
+    </mat-card-header>
+    <span>{{post.instruments}}</span>
+    <div *ngIf="post.type === 'Link'"> asd<div *ngIf="post.type === 'Link'" [innerHtml]="embedVideo()"></div></div>
+    <mat-card-content>
+      <br />
+      <p>
+        {{post.description}}
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button>LIKE</button>
+      <button mat-button>COMMENTS</button>
+    </mat-card-actions>
+  </mat-card>

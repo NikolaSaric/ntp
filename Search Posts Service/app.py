@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, make_response
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from flask_pymongo import PyMongo
 from bson.json_util import dumps
 
@@ -17,7 +17,7 @@ def get_all():
     page = int(request.headers.get('page'))
     per_page = int(request.headers.get('perPage'))
 
-    return dumps(list(mongo.db.post.find().skip(page * per_page).limit(per_page)))
+    return dumps(list(mongo.db.post.find().skip(page * per_page).limit(per_page).sort("_id", -1)))
 
 
 if __name__ == '__main__':

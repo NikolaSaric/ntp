@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PostService } from '../services/post.service';
+import { Post } from '../models/post';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +12,8 @@ export class HomeComponent implements OnInit {
   constructor(private postService: PostService) { }
 
   page = 0;
-  perPage = 1;
+  perPage = 2;
+  posts: Post[];
 
   ngOnInit() {
     this.getAllPosts();
@@ -21,8 +23,21 @@ export class HomeComponent implements OnInit {
     this.postService.getAllPosts(this.page.toString(), this.perPage.toString()).subscribe(
       (response => {
         console.log(response);
+        this.posts = response;
       })
     );
+  }
+
+  loadMorePosts() {
+    this.page += 1;
+
+    this.postService.getAllPosts(this.page.toString(), this.perPage.toString()).subscribe(
+      (response => {
+        console.log(response);
+        this.posts = this.posts.concat(response);
+      })
+    );
+    console.log(this.posts);
   }
 
 }

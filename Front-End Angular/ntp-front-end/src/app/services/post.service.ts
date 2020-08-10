@@ -27,4 +27,12 @@ export class PostService {
 
     return this.http.post<Post>(this.constants.postPort + '/post/api/', post, { headers });
   }
+
+  public uploadFile(data: FormData): Observable<void> {
+    const headers: HttpHeaders = new HttpHeaders({
+      jwt: localStorage.getItem('jwt')
+    });
+
+    return this.http.post<void>(this.constants.postPort + '/post/api/file', data, { headers });
+  }
 }

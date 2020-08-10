@@ -8,6 +8,8 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/NikolaSaric/ntp/Post_Service/fileHandlers"
+
 	"github.com/NikolaSaric/ntp/Post_Service/data"
 	"github.com/NikolaSaric/ntp/Post_Service/handlers"
 	"github.com/rs/cors"
@@ -21,10 +23,12 @@ func main() {
 
 	// create the handlers
 	ph := handlers.NewPosts(l)
+	fh := fileHandlers.NewFileHandler(l)
 
 	// create a new serve mux and register the handlers
 	sm := http.NewServeMux()
 	sm.Handle("/post/api/", ph)
+	sm.HandleFunc("/post/api/file", fh.UploadFile)
 
 	// CORS
 	cf := cors.New(cors.Options{

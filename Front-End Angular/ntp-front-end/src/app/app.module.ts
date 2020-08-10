@@ -15,6 +15,8 @@ import { HomeComponent } from './home/home.component';
 import { PostComponent } from './post/post.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { AddPostComponent } from './add-post/add-post.component';
+import { EmbedVideo } from 'ngx-embed-video';
+import { MaterialFileInputModule } from 'ngx-material-file-input';
 
 
 @NgModule({
@@ -35,7 +37,9 @@ import { AddPostComponent } from './add-post/add-post.component';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    EmbedVideo.forRoot(),
+    MaterialFileInputModule
 
   ],
   providers: [],

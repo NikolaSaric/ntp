@@ -1,6 +1,6 @@
 <app-navbar></app-navbar>
 
-<div class="form-wrapper">
+<div class="form-wrapper" *ngIf="addPostForm">
   <mat-card class="box">
     <mat-card-header>
       Add new post
@@ -33,10 +33,25 @@
           <mat-error>Please choose a type of post</mat-error>
         </mat-form-field>
 
-        <mat-form-field *ngIf="checkType()">
+        <mat-form-field *ngIf="checkType() === 'Link'">
           <input matInput formControlName="location" placeholder="Link address" />
           <mat-error>Missing link.</mat-error>
         </mat-form-field>
+
+        <mat-form-field *ngIf="checkType() === 'Video'">
+        <ngx-mat-file-input formControlName="file" placeholder="Add Video" accept="video/*">
+        </ngx-mat-file-input>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="checkType() === 'Audio'">
+        <ngx-mat-file-input formControlName="file" placeholder="Add Audio" accept="audio/*">
+        </ngx-mat-file-input>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="checkType() === 'Image'">
+        <ngx-mat-file-input formControlName="file" placeholder="Add Photo" accept="image/*">
+        </ngx-mat-file-input>
+      </mat-form-field>
 
         <mat-form-field>
           <textarea matInput formControlName="description" placeholder="Description">
@@ -46,7 +61,7 @@
 
         <div formArrayName="instruments">
           <button type="button" (click)="addInstrument()">Add Instrument</button>
-          <div *ngFor="let cat of addPostForm.controls.instruments.controls; let i = index">
+          <div *ngFor="let cat of instruments; let i = index">
             <mat-form-field>
               <input matInput formControlName="{{i}}" placeholder="Instrument" />
               <mat-error>Instruments is empty.</mat-error>
@@ -57,7 +72,7 @@
 
         <div formArrayName="tags">
           <button type="button" (click)="addTag()">Add Tag</button>
-          <div *ngFor="let cat of addPostForm.controls.tags.controls; let i = index">
+          <div *ngFor="let cat of tags; let i = index">
             <mat-form-field>
               <input matInput formControlName="{{i}}" placeholder="Tag" />
               <mat-error>Tag is empty.</mat-error>
