@@ -4,7 +4,8 @@
       <mat-card-subtitle>{{post.username}} | {{formatTags()}}</mat-card-subtitle>
     </mat-card-header>
     <span>{{post.instruments}}</span>
-    <div *ngIf="post.type === 'Link'"> asd<div *ngIf="post.type === 'Link'" [innerHtml]="embedVideo()"></div></div>
+    <div *ngIf="post.type === 'Link'"><div *ngIf="post.type === 'Link'" [innerHtml]="embedVideo()"></div></div>
+    <div *ngIf="post.type === 'Image'"><img src="{{'data:image/jpg;base64,' + image}}" /></div>
     <mat-card-content>
       <br />
       <p>

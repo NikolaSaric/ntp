@@ -35,4 +35,9 @@ export class PostService {
 
     return this.http.post<void>(this.constants.postPort + '/post/api/file', data, { headers });
   }
+
+  public getImage(id: string) {
+
+    return this.http.get(this.constants.postPort + '/post/api/image/' + id, {responseType: 'text'});
+  }
 }

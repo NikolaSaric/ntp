@@ -8,10 +8,10 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/NikolaSaric/ntp/Post_Service/fileHandlers"
-
 	"github.com/NikolaSaric/ntp/Post_Service/data"
+	"github.com/NikolaSaric/ntp/Post_Service/fileHandlers"
 	"github.com/NikolaSaric/ntp/Post_Service/handlers"
+	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 )
 
@@ -19,16 +19,17 @@ func main() {
 
 	data.InitDatabase()
 
-	l := log.New(os.Stdout, "products-api ", log.LstdFlags)
+	l := log.New(os.Stdout, "posts ", log.LstdFlags)
 
 	// create the handlers
 	ph := handlers.NewPosts(l)
 	fh := fileHandlers.NewFileHandler(l)
 
 	// create a new serve mux and register the handlers
-	sm := http.NewServeMux()
-	sm.Handle("/post/api/", ph)
-	sm.HandleFunc("/post/api/file", fh.UploadFile)
+	sm := mux.NewRouter()
+	sm.HandleFunc("/post/api/", ph.AddPost).Methods(http.MethodPost)
+	sm.HandleFunc("/post/api/file", fh.UploadFile).Methods(http.MethodPost)
+	sm.HandleFunc("/post/api/image/{id}", fh.GetImage).Methods(http.MethodGet)
 
 	// CORS
 	cf := cors.New(cors.Options{

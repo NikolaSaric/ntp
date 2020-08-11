@@ -2,10 +2,8 @@ package handlers
 
 import (
 	"encoding/json"
-	"io"
 	"log"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/NikolaSaric/ntp/Post_Service/data"
@@ -25,35 +23,8 @@ func NewPosts(l *log.Logger) *Posts {
 	return &Posts{l}
 }
 
-// ServeHTTP is the main entry point for the handler
-func (p *Posts) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
-	// handle the request for a list of products
-	if r.Method == http.MethodGet {
-		// GetPosts
-		p.l.Println("Recieved GET ALL request")
-		return
-	}
-
-	if r.Method == http.MethodPost {
-		// AddPosts
-		p.l.Println("Recieved POST request")
-		p.addPost(rw, r)
-		return
-	}
-
-	if r.Method == http.MethodPut {
-
-		// UpadatePost
-		p.l.Println("Recieved PUT request")
-		return
-	}
-
-	// catch all
-	// if no method is satisfied return an error
-	rw.WriteHeader(http.StatusMethodNotAllowed)
-}
-
-func (p *Posts) addPost(rw http.ResponseWriter, r *http.Request) {
+// AddPost adds new post to db
+func (p *Posts) AddPost(rw http.ResponseWriter, r *http.Request) {
 	tokenString := r.Header.Get("jwt")
 	claims := jwt.MapClaims{}
 
@@ -85,49 +56,4 @@ func (p *Posts) addPost(rw http.ResponseWriter, r *http.Request) {
 
 	log.Println(newPost)
 
-}
-
-// UploadFile : Saves uploaded file from front-end
-func (p *Posts) UploadFile(rw http.ResponseWriter, r *http.Request) {
-	p.l.Println("HERE 1")
-	err := r.ParseMultipartForm(32 << 20)
-	if err != nil {
-		p.l.Println(err)
-		http.Error(rw, "Expected multipart form data", http.StatusBadRequest)
-		return
-	}
-
-	for key, values := range r.PostForm {
-		p.l.Println(key)
-		p.l.Println(values)
-	}
-
-	fileName := r.FormValue("fileName")
-	p.l.Println(fileName)
-	// fileType := r.FormValue("type")
-
-	ff, _, err := r.FormFile("file")
-	if err != nil {
-		p.l.Println("Err 1")
-		p.l.Println(err)
-		http.Error(rw, "Expected file", http.StatusBadRequest)
-		return
-	}
-
-	defer ff.Close()
-	p.l.Println("HERE 2")
-	// This is path which we want to store the file
-	f, err := os.OpenFile("/pathToStoreFile/"+fileName, os.O_WRONLY|os.O_CREATE, 0666)
-
-	if err != nil {
-		p.l.Println("Err 3")
-		p.l.Println(err)
-		http.Error(rw, "Expected file", http.StatusBadRequest)
-		return
-	}
-
-	// Copy the file to the destination path
-	io.Copy(f, ff)
-	p.l.Println("HERE 3")
-	return
 }
