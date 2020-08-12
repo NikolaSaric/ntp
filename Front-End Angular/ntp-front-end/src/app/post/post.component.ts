@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Post } from '../models/post';
 import { DomSanitizer } from '@angular/platform-browser';
 import { EmbedVideoService } from 'ngx-embed-video';
@@ -15,10 +15,22 @@ export class PostComponent implements OnInit {
 
   @Input() post: Post;
   image: string;
+  video: string;
+  audio: string;
+  @ViewChild("videoPlayer", { static: false }) videoplayer: ElementRef;
+  isPlay: boolean = false;
+
+  toggleVideo() {
+    this.videoplayer.nativeElement.play();
+  }
 
   ngOnInit() {
     if (this.post.type === 'Image') {
       this.loadImage();
+    } else if (this.post.type === 'Video') {
+      this.video = this.postService.getVideo(this.post.id);
+    } else if (this.post.type === 'Audio') {
+      this.audio = this.postService.getAudio(this.post.id);
     }
   }
 
@@ -33,7 +45,6 @@ export class PostComponent implements OnInit {
   loadImage() {
     this.postService.getImage(this.post.id).subscribe(
       (response => {
-        console.log(response);
         this.image = response;
       })
     );

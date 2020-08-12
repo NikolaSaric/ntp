@@ -25,6 +25,8 @@ func NewPosts(l *log.Logger) *Posts {
 
 // AddPost adds new post to db
 func (p *Posts) AddPost(rw http.ResponseWriter, r *http.Request) {
+	p.l.Println("POST Add Post")
+
 	tokenString := r.Header.Get("jwt")
 	claims := jwt.MapClaims{}
 

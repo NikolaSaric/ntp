@@ -4,8 +4,21 @@
       <mat-card-subtitle>{{post.username}} | {{formatTags()}}</mat-card-subtitle>
     </mat-card-header>
     <span>{{post.instruments}}</span>
-    <div *ngIf="post.type === 'Link'"><div *ngIf="post.type === 'Link'" [innerHtml]="embedVideo()"></div></div>
-    <div *ngIf="post.type === 'Image'"><img src="{{'data:image/jpg;base64,' + image}}" /></div>
+    <div *ngIf="post.type === 'Link'"><div [innerHtml]="embedVideo()"></div></div>
+    <div *ngIf="post.type === 'Image'"><img src="{{'data:image/jpg;base64,' + image}}" width="300"/></div>
+    <div *ngIf="post.type === 'Video'">
+      <video controls (click)="toggleVideo()" #videoPlayer width="450">
+        <source [src]="video" type="video/mp4" />
+        Browser not supported
+      </video>
+    </div>
+
+    <div *ngIf="post.type === 'Audio'">
+      <audio controls>
+        <source [src]="audio" type="audio/mpeg">
+        Your browser does not support the audio tag.
+      </audio>
+    </div>
     <mat-card-content>
       <br />
       <p>

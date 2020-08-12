@@ -30,6 +30,8 @@ func main() {
 	sm.HandleFunc("/post/api/", ph.AddPost).Methods(http.MethodPost)
 	sm.HandleFunc("/post/api/file", fh.UploadFile).Methods(http.MethodPost)
 	sm.HandleFunc("/post/api/image/{id}", fh.GetImage).Methods(http.MethodGet)
+	sm.HandleFunc("/post/api/video/{id}", fh.GetVideo).Methods(http.MethodGet)
+	sm.HandleFunc("/post/api/audio/{id}", fh.GetAudio).Methods(http.MethodGet)
 
 	// CORS
 	cf := cors.New(cors.Options{

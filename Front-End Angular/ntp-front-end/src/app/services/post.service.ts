@@ -40,4 +40,14 @@ export class PostService {
 
     return this.http.get(this.constants.postPort + '/post/api/image/' + id, {responseType: 'text'});
   }
+
+  public getVideo(id: string): string {
+
+    return this.constants.postPort + '/post/api/video/' + id;
+  }
+
+  public getAudio(id: string): string {
+
+    return this.constants.postPort + '/post/api/audio/' + id;
+  }
 }

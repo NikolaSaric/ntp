@@ -61,7 +61,7 @@
 
         <div formArrayName="instruments">
           <button type="button" (click)="addInstrument()">Add Instrument</button>
-          <div *ngFor="let cat of instruments; let i = index">
+          <div *ngFor="let cat of instruments; let i = index; trackBy:trackByFn">
             <mat-form-field>
               <input matInput formControlName="{{i}}" placeholder="Instrument" />
               <mat-error>Instruments is empty.</mat-error>
@@ -72,7 +72,7 @@
 
         <div formArrayName="tags">
           <button type="button" (click)="addTag()">Add Tag</button>
-          <div *ngFor="let cat of tags; let i = index">
+          <div *ngFor="let cat of tags; let i = index; trackBy:trackByFn2">
             <mat-form-field>
               <input matInput formControlName="{{i}}" placeholder="Tag" />
               <mat-error>Tag is empty.</mat-error>

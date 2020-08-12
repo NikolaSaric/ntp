@@ -98,7 +98,6 @@ export class AddPostComponent implements OnInit {
 
         formData.append('fileName', response.id);
         this.postService.uploadFile(formData).subscribe(() => {
-          this.snackBar.open('Successfully uploaded file.');
         }, err => {
           this.snackBar.open(err);
         });
@@ -109,5 +108,13 @@ export class AddPostComponent implements OnInit {
     );
 
   }
+
+  trackByFn(index: any, item: any) {
+    return index;
+ }
+
+ trackByFn2(index: any, item: any) {
+  return index;
+}
 
 }
