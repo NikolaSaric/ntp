@@ -48,7 +48,6 @@ export class RegisterComponent implements OnInit {
     this.userService.register(registerInfo).subscribe(
       (response => {
         if (response != null) {
-          console.log(response);
           this.snackBar.open(response);
         }
       }),

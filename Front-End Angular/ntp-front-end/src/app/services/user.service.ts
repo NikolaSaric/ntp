@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Token } from '../models/token';
 import { RegisterInfo } from '../models/register-info';
+import { ChangePasswordInfo } from '../models/change-password-info';
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +24,13 @@ export class UserService {
   public register(registerInfo: RegisterInfo): Observable<string> {
 
     return this.http.post<string>(this.constants.userPort + '/auth/register', registerInfo);
+  }
+
+  public changePassword(changePasswordInfo: ChangePasswordInfo, jwt: string): Observable<string> {
+    const headers: HttpHeaders = new HttpHeaders({
+      jwt
+    });
+
+    return this.http.post<string>(this.constants.userPort + '/auth/change-password', changePasswordInfo, { headers });
   }
 }

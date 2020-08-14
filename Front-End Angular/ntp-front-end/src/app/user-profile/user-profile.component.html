@@ -1,1 +1,70 @@
-<p>user-profile works!</p>
+<app-navbar></app-navbar>
+
+<div class="center">
+
+    <mat-card class="post-card mat-card-cvr">
+        <mat-card-header>
+            <mat-card-title>{{user.fullName}}</mat-card-title>
+            <mat-card-subtitle>{{user.username}} | {{user.email}} | {{user.registrationDate | date:"MM/dd/yyyy"}}
+            </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <br />
+            <p>
+                {{user.description}}
+            </p>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-button (click)="changePasswordBtnClick()">Change Password</button>
+            <button mat-button>Edit Info</button>
+        </mat-card-actions>
+    </mat-card>
+
+    <div class="form-wrapper" *ngIf="changePasswordWindow">
+        <mat-card class="box">
+            <form class="form" [formGroup]="changePasswordForm"
+                (ngSubmit)="changePasswordForm.valid && onChangePasswordubmit()" noval>
+                <mat-card-content>
+                    <mat-form-field class="field-full-width">
+                        <input matInput formControlName="oldPassword" placeholder="Old Password"
+                            [type]="hide ? 'password':'text'" />
+                        <mat-error>Missing old password.</mat-error>
+                        <mat-icon matSuffix (click)="hide = !hide">
+                            {{hide ? 'visibility' : 'visibility_off'}}
+                        </mat-icon>
+                    </mat-form-field>
+
+                    <mat-form-field class="field-full-width">
+                        <input matInput formControlName="newPassword" placeholder="New Password"
+                            [type]="hide ? 'password':'text'" />
+                        <mat-error>Missing password.</mat-error>
+                        <mat-icon matSuffix (click)="hide = !hide">
+                            {{hide ? 'visibility' : 'visibility_off'}}
+                        </mat-icon>
+                    </mat-form-field>
+
+                    <mat-form-field class="field-full-width">
+                        <input matInput formControlName="repeatedPassword" placeholder="Repeat Password"
+                            [type]="hide ? 'password':'text'" />
+                        <mat-error>Repeat password.</mat-error>
+                        <mat-icon matSuffix (click)="hide = !hide">
+                            {{hide ? 'visibility' : 'visibility_off'}}
+                        </mat-icon>
+                    </mat-form-field>
+
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-button>Change Password</button>
+                    <button mat-button (click)="cancelChangePasswordBtnClick()">Cancel</button>
+                </mat-card-actions>
+            </form>
+        </mat-card>
+        <br />
+    </div>
+
+    <app-post [post]="post" *ngFor="let post of posts"></app-post>
+
+    <button mat-stroked-button color="primary" (click)="loadMorePosts()" class="button-center">Load More
+        Posts</button>
+
+</div>

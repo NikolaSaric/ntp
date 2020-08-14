@@ -42,6 +42,8 @@ export class LogInComponent implements OnInit {
           localStorage.setItem('jwt', response.token);
 
           this.snackBar.open('Successfully logged in as: ' + this.username);
+
+          this.router.navigateByUrl('/profile');
         }
       }),
       (error => {

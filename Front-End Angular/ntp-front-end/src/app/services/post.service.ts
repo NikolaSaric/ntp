@@ -20,6 +20,16 @@ export class PostService {
     return this.http.get<Post[]>(this.constants.searchPostPort + '/post/api/', { headers });
   }
 
+  public getUserPosts(page: string, perPage: string, jwt: string): Observable<Post[]> {
+    const headers: HttpHeaders = new HttpHeaders({
+      page,
+      perPage,
+      jwt
+    });
+
+    return this.http.get<Post[]>(this.constants.searchPostPort + '/post/api/user-posts', { headers });
+  }
+
   public addPost(post: Post): Observable<Post> {
     const headers: HttpHeaders = new HttpHeaders({
       jwt: localStorage.getItem('jwt')

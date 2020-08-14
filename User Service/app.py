@@ -63,7 +63,8 @@ def log_in():
 
     if check_password_hash(user.password, auth.password):
         token = jwt.encode(
-            {'username': user.username, 'full_name': user.full_name, 'email': user.email, 'admin': user.admin,
+            {'username': user.username, 'full_name': user.full_name, 'email': user.email,
+             'description': user.description, 'admin': user.admin,
              'registration_date': str(user.registration_date),
              'exp': datetime.utcnow() + timedelta(days=2)},
             app.config['SECRET_KEY'])
@@ -71,6 +72,37 @@ def log_in():
         return jsonify({'token': token.decode('UTF-8')})
 
     return make_response('Username and password do not match', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
+
+
+@app.route('/auth/change-password', methods=['POST'])
+def change_password():
+    data = request.get_json()
+    token = request.headers.get('jwt')
+
+    decoded_jwt = jwt.decode(token, app.config['SECRET_KEY'])
+
+    if data['newPassword'] != data['repeatedPassword']:
+        return make_response('New password does not much repeated password', 401)
+
+    user = User.query.filter_by(username=decoded_jwt.get('username')).first()
+
+    if not user:
+        return make_response('Not existing username', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
+
+    if check_password_hash(user.password, data['oldPassword']):
+        user.password = generate_password_hash(data['newPassword'], method='SHA256')
+
+        try:
+            db.session.commit()
+
+        except SQLAlchemyError as e:
+            error = str(e.__dict__['orig'])
+            return error
+
+        return 'Successfully changed password'
+
+    return make_response('Username and password do not match', 401,
+                         {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
 
 if __name__ == '__main__':
