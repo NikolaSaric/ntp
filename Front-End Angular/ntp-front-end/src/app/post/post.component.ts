@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { Post } from '../models/post';
 import { DomSanitizer } from '@angular/platform-browser';
 import { EmbedVideoService } from 'ngx-embed-video';
 import { PostService } from '../services/post.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-post',
@@ -11,14 +12,16 @@ import { PostService } from '../services/post.service';
 })
 export class PostComponent implements OnInit {
 
-  constructor(private dom: DomSanitizer, private embedService: EmbedVideoService, private postService: PostService) { }
+  constructor(private dom: DomSanitizer, private embedService: EmbedVideoService,
+              private postService: PostService, private snackBar: MatSnackBar) { }
 
   @Input() post: Post;
   image: string;
   video: string;
   audio: string;
   @ViewChild("videoPlayer", { static: false }) videoplayer: ElementRef;
-  isPlay: boolean = false;
+  @Output() delete: EventEmitter<Post> = new EventEmitter();
+  isPlay = false;
 
   toggleVideo() {
     this.videoplayer.nativeElement.play();
@@ -46,6 +49,37 @@ export class PostComponent implements OnInit {
     this.postService.getImage(this.post.id).subscribe(
       (response => {
         this.image = response;
+      })
+    );
+  }
+
+  checkAuthor() {
+    const jwt = localStorage.getItem('jwt');
+
+    if (jwt === null) {
+      return false;
+    }
+
+    const pt = JSON.parse(window.atob(jwt.split('.')[1]));
+
+    if (pt.username === this.post.username) {
+      return true;
+    }
+
+    return false;
+  }
+
+  deletePost() {
+    this.postService.deletePost(this.post.id).subscribe(
+      (response => {
+        console.log('res');
+        this.snackBar.open(response);
+        this.delete.emit(this.post);
+      }),
+      (error => {
+        console.log('err');
+        this.snackBar.open(error.error.text);
+        this.delete.emit(this.post);
       })
     );
   }

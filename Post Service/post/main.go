@@ -28,6 +28,7 @@ func main() {
 	// create a new serve mux and register the handlers
 	sm := mux.NewRouter()
 	sm.HandleFunc("/post/api/", ph.AddPost).Methods(http.MethodPost)
+	sm.HandleFunc("/post/api/{id}", ph.DeletePost).Methods(http.MethodDelete)
 	sm.HandleFunc("/post/api/file", fh.UploadFile).Methods(http.MethodPost)
 	sm.HandleFunc("/post/api/image/{id}", fh.GetImage).Methods(http.MethodGet)
 	sm.HandleFunc("/post/api/video/{id}", fh.GetVideo).Methods(http.MethodGet)

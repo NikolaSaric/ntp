@@ -99,4 +99,8 @@ export class UserProfileComponent implements OnInit {
     this.cancelChangePasswordBtnClick();
   }
 
+  deletePost(post: Post) {
+    this.posts = this.posts.filter(x => x !== post);
+  }
+
 }

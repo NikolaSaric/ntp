@@ -40,4 +40,8 @@ export class HomeComponent implements OnInit {
     console.log(this.posts);
   }
 
+  deletePost(post: Post) {
+    this.posts = this.posts.filter(x => x !== post);
+  }
+
 }

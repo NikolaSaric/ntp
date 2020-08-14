@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 
-	mongopagination "github.com/gobeam/mongo-go-pagination"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -77,17 +76,22 @@ func Save(post *Post) *mongo.InsertOneResult {
 
 }
 
-// GetPosts : returns all posts as pages
-func GetPosts(perPage, page int64) *mongopagination.PaginatedData {
+// GetByID : returns entity by id
+func GetByID(id primitive.ObjectID) *mongo.SingleResult {
 
-	filter := bson.M{}
+	result := collection.FindOne(context.TODO(), bson.M{"_id": id})
 
-	// Querying paginated data
-	paginatedData, err := mongopagination.New(collection).Limit(perPage).Page(page).Filter(filter).Find()
+	return result
+}
+
+// Delete : deletes entity from db by id
+func Delete(id primitive.ObjectID) *mongo.DeleteResult {
+
+	result, err := collection.DeleteOne(context.TODO(), bson.M{"_id": id})
+
 	if err != nil {
-		panic(err)
+		log.Fatal("DeleteOne() ERROR:", err)
 	}
 
-	return paginatedData
-
+	return result
 }

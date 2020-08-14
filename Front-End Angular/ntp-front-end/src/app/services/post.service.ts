@@ -38,6 +38,14 @@ export class PostService {
     return this.http.post<Post>(this.constants.postPort + '/post/api/', post, { headers });
   }
 
+  public deletePost(id: string): Observable<string> {
+    const headers: HttpHeaders = new HttpHeaders({
+      jwt: localStorage.getItem('jwt')
+    });
+
+    return this.http.delete<string>(this.constants.postPort + '/post/api/' + id, { headers });
+  }
+
   public uploadFile(data: FormData): Observable<void> {
     const headers: HttpHeaders = new HttpHeaders({
       jwt: localStorage.getItem('jwt')
@@ -48,7 +56,7 @@ export class PostService {
 
   public getImage(id: string) {
 
-    return this.http.get(this.constants.postPort + '/post/api/image/' + id, {responseType: 'text'});
+    return this.http.get(this.constants.postPort + '/post/api/image/' + id, { responseType: 'text' });
   }
 
   public getVideo(id: string): string {

@@ -62,7 +62,7 @@
         <br />
     </div>
 
-    <app-post [post]="post" *ngFor="let post of posts"></app-post>
+    <app-post [post]="post" (delete)="deletePost($event)" *ngFor="let post of posts"></app-post>
 
     <button mat-stroked-button color="primary" (click)="loadMorePosts()" class="button-center">Load More
         Posts</button>
