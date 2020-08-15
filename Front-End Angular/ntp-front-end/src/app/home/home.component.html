@@ -1,7 +1,33 @@
 <app-navbar></app-navbar>
 
-<div class="center">
-    <app-post [post]="post" (delete)="deletePost($event)" *ngFor="let post of posts" ></app-post>
 
-    <button mat-stroked-button color="primary" (click)="loadMorePosts()" class="button-center">Load More Posts</button>
-</div>
+<mat-tab-group mat-align-tabs="center">
+    <mat-tab label="Feed">
+        <app-post-list [searchData]='searchByFeed'></app-post-list>
+    </mat-tab>
+    <mat-tab label="Song">
+        <ng-template matTabContent>
+        <app-post-list [searchData]='searchBySong'></app-post-list>
+    </ng-template>
+    </mat-tab>
+    <mat-tab label="Improve">
+        <ng-template matTabContent>
+        <app-post-list [searchData]='searchByImprove'></app-post-list>
+    </ng-template>
+    </mat-tab>
+    <mat-tab label="Lesson">
+        <ng-template matTabContent>
+        <app-post-list [searchData]='searchByLesson'></app-post-list>
+    </ng-template>
+    </mat-tab>
+    <mat-tab label="Challenge">
+        <ng-template matTabContent>
+        <app-post-list [searchData]='searchByChallenge'></app-post-list>
+    </ng-template>
+    </mat-tab>
+    <mat-tab label="Discussion">
+        <ng-template matTabContent>
+        <app-post-list [searchData]='searchByDiscussion'></app-post-list>
+    </ng-template>
+    </mat-tab>
+</mat-tab-group>

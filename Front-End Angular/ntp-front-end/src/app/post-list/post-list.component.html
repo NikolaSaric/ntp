@@ -1,0 +1,39 @@
+<div class="center">
+
+    <div *ngIf="searchWindow">
+        <mat-card class="box">
+            <form class="form" [formGroup]="searchForm" (ngSubmit)="onSearchSubmit()" noval>
+                <mat-card-content>
+                    <mat-form-field>
+                        <mat-label>Type</mat-label>
+                        <mat-select formControlName="type">
+                            <mat-option *ngFor="let type of types" [value]="type">
+                                {{type}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="title" placeholder="Title" />
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="username" placeholder="Username" />
+                    </mat-form-field>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-button>Search</button>
+                    <button mat-button (click)="resetSearchBtnClick()">Reset</button>
+                    <button mat-button (click)="cancelSearchdBtnClick()">Cancel</button>
+                </mat-card-actions>
+            </form>
+        </mat-card>
+        <br />
+    </div>
+    <button mat-stroked-button color="primary" *ngIf="searchBtn" (click)="searchBtnClick()"
+        class="button-center">Search</button>
+
+    <app-post [post]="post" (delete)="deletePost($event)" *ngFor="let post of posts"></app-post>
+
+    <button mat-stroked-button color="primary" (click)="loadMorePosts()" class="button-center">Load More Posts</button>
+</div>

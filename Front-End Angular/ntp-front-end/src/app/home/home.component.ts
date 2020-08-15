@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PostService } from '../services/post.service';
 import { Post } from '../models/post';
+import { SearchData } from '../models/search-data';
 
 @Component({
   selector: 'app-home',
@@ -15,33 +16,15 @@ export class HomeComponent implements OnInit {
   perPage = 2;
   posts: Post[];
 
+  searchByFeed = new SearchData('', '', '', '');
+  searchBySong = new SearchData('Song', '', '', '');
+  searchByImprove = new SearchData('Improve', '', '', '');
+  searchByLesson = new SearchData('Lesson', '', '', '');
+  searchByChallenge = new SearchData('Challenge', '', '', '');
+  searchByDiscussion = new SearchData('Discussion', '', '', '');
+
   ngOnInit() {
-    this.getAllPosts();
   }
 
-  getAllPosts() {
-    this.postService.getAllPosts(this.page.toString(), this.perPage.toString()).subscribe(
-      (response => {
-        console.log(response);
-        this.posts = response;
-      })
-    );
-  }
-
-  loadMorePosts() {
-    this.page += 1;
-
-    this.postService.getAllPosts(this.page.toString(), this.perPage.toString()).subscribe(
-      (response => {
-        console.log(response);
-        this.posts = this.posts.concat(response);
-      })
-    );
-    console.log(this.posts);
-  }
-
-  deletePost(post: Post) {
-    this.posts = this.posts.filter(x => x !== post);
-  }
 
 }

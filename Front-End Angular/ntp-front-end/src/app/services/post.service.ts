@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Constants } from './constants';
 import { Observable } from 'rxjs';
 import { Post } from '../models/post';
+import { SearchData } from '../models/search-data';
 
 @Injectable({
   providedIn: 'root'
@@ -11,13 +12,14 @@ export class PostService {
 
   constructor(private http: HttpClient, private constants: Constants) { }
 
-  public getAllPosts(page: string, perPage: string): Observable<Post[]> {
+  public getAllPosts(page: string, perPage: string, searchData: SearchData): Observable<Post[]> {
     const headers: HttpHeaders = new HttpHeaders({
       page,
       perPage
     });
 
-    return this.http.get<Post[]>(this.constants.searchPostPort + '/post/api/', { headers });
+    return this.http.get<Post[]>(this.constants.searchPostPort + '/post/api?category=' + searchData.category
+    + '&username=' + searchData.username + '&type=' + searchData.type + '&title=' + searchData.title, { headers });
   }
 
   public getUserPosts(page: string, perPage: string, jwt: string): Observable<Post[]> {

@@ -1,0 +1,11 @@
+.center {
+    margin: auto;
+    width: 30%;
+    border: 3px;
+    padding: 10px;
+  }
+
+  .button-center{
+    width: 100%;
+    text-align:center;
+ }
