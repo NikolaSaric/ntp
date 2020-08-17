@@ -11,7 +11,7 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LogInComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'profile', component: UserProfileComponent },
+  { path: 'profile/:username', component: UserProfileComponent },
 
   // For testing purposes only
   { path: 'add-post', component: AddPostComponent },

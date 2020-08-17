@@ -5,6 +5,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
+import json
 
 app = Flask(__name__)
 
@@ -26,6 +27,25 @@ class User(db.Model):
     confirmed_email = db.Column(db.Boolean)
     admin = db.Column(db.Boolean)
     registration_date = db.Column(db.Date)
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializable format"""
+        return {
+            'id': self.id,
+            'username': self.username,
+            'fullName': self.full_name,
+            'email': self.email,
+            'description': self.description,
+            'admin': self.admin,
+            'registrationDate': dump_datetime(self.registration_date)
+        }
+
+
+def dump_datetime(value):
+    if value is None:
+        return None
+    return value.strftime("%m-%d-%Y")
 
 
 @app.route('/auth/register', methods=['POST'])
@@ -74,7 +94,7 @@ def log_in():
     return make_response('Username and password do not match', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
 
-@app.route('/auth/change-password', methods=['POST'])
+@app.route('/user/change-password', methods=['POST'])
 def change_password():
     data = request.get_json()
     token = request.headers.get('jwt')
@@ -103,6 +123,19 @@ def change_password():
 
     return make_response('Username and password do not match', 401,
                          {'WWW-Authenticate': 'Basic realm="Login required!"'})
+
+
+@app.route('/user', methods=['GET'])
+def get_user():
+    username = request.args.get('username', None)
+    if username is None or username == '':
+        return make_response('Username not found', 404)
+
+
+
+    user = User.query.filter_by(username=username).first()
+
+    return jsonify(user.serialize)
 
 
 if __name__ == '__main__':

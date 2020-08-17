@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Token } from '../models/token';
 import { RegisterInfo } from '../models/register-info';
 import { ChangePasswordInfo } from '../models/change-password-info';
+import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +32,11 @@ export class UserService {
       jwt
     });
 
-    return this.http.post<string>(this.constants.userPort + '/auth/change-password', changePasswordInfo, { headers });
+    return this.http.post<string>(this.constants.userPort + '/user/change-password', changePasswordInfo, { headers });
+  }
+
+  public getUser(username: string): Observable<User> {
+
+    return this.http.get<User>(this.constants.userPort + '/user?username=' + username);
   }
 }

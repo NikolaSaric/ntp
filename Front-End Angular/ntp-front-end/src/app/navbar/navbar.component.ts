@@ -36,7 +36,10 @@ export class NavbarComponent implements OnInit {
   }
 
   goToProfile() {
-    this.router.navigate(['/user-profile']);
+    const token = localStorage.getItem('jwt');
+    const pt = JSON.parse(window.atob(token.split('.')[1]));
+
+    this.router.navigate(['/profile/' + pt.username]);
   }
 
 

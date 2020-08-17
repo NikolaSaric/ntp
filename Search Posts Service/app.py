@@ -13,15 +13,7 @@ app.config["MONGO_URI"] = "mongodb://localhost:27017/ntp-post"
 mongo = PyMongo(app)
 
 
-@app.route('/post/api/test', methods=['GET'])
-def get_all():
-    page = int(request.headers.get('page'))
-    per_page = int(request.headers.get('perPage'))
-
-    return dumps(list(mongo.db.post.find().skip(page * per_page).limit(per_page).sort("_id", -1)))
-
-
-@app.route('/post/api/user-posts', methods=['GET'])
+@app.route('/post/user-posts', methods=['GET'])
 def get_user_posts():
     page = int(request.headers.get('page'))
     per_page = int(request.headers.get('perPage'))
@@ -33,7 +25,7 @@ def get_user_posts():
                       .skip(page * per_page).limit(per_page).sort("_id", -1)))
 
 
-@app.route('/post/api', methods=['GET'])
+@app.route('/post', methods=['GET'])
 def get_posts_by_search_data():
     page = int(request.headers.get('page'))
     per_page = int(request.headers.get('perPage'))

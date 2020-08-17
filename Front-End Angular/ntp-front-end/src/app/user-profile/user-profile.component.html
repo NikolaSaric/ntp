@@ -1,6 +1,6 @@
 <app-navbar></app-navbar>
 
-<div class="center">
+<div class="center" *ngIf="user">
 
     <mat-card class="post-card mat-card-cvr">
         <mat-card-header>
@@ -15,8 +15,9 @@
             </p>
         </mat-card-content>
         <mat-card-actions>
-            <button mat-button (click)="changePasswordBtnClick()">Change Password</button>
-            <button mat-button>Edit Info</button>
+            <button mat-button *ngIf="checkAuthor()" (click)="changePasswordBtnClick()">Change Password</button>
+            <button mat-button *ngIf="checkAuthor()">Edit Info</button>
+            <button mat-button *ngIf="!checkAuthor()" (click)="followBtnClick()">Follow</button>
         </mat-card-actions>
     </mat-card>
 

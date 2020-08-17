@@ -6,6 +6,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { UserService } from '../services/user.service';
 import { ChangePasswordInfo } from '../models/change-password-info';
+import { Constants } from '../services/constants';
+import { ActivatedRoute } from '@angular/router';
+import { SearchData } from '../models/search-data';
 
 @Component({
   selector: 'app-user-profile',
@@ -15,31 +18,35 @@ import { ChangePasswordInfo } from '../models/change-password-info';
 export class UserProfileComponent implements OnInit {
 
   constructor(private postService: PostService, private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar, private userService: UserService) { }
+              private snackBar: MatSnackBar, private userService: UserService,
+              private constants: Constants, private route: ActivatedRoute) { }
 
   user: User;
   page = 0;
-  perPage = 2;
+  perPage = this.constants.perPage;
   posts: Post[];
   changePasswordWindow: boolean;
   changePasswordForm: FormGroup;
   hide = true;
 
   ngOnInit() {
-    this.createUser();
-    this.getAllPosts();
+    this.getUser();
   }
 
-  createUser() {
-    const token = localStorage.getItem('jwt');
-    const pt = JSON.parse(window.atob(token.split('.')[1]));
-    console.log(pt);
-    this.user = new User(pt.username, pt.full_name, pt.email, pt.description, pt.admin, pt.registration_date);
-    console.log(this.user);
+  getUser() {
+    console.log(this.route.snapshot.paramMap.get('username'));
+    this.userService.getUser(this.route.snapshot.paramMap.get('username')).subscribe(
+      (response => {
+        console.log(response);
+        this.user = response;
+        this.getAllPosts();
+      })
+    );
   }
 
   getAllPosts() {
-    this.postService.getUserPosts(this.page.toString(), this.perPage.toString(), localStorage.getItem('jwt')).subscribe(
+    const searchData = new SearchData('', this.user.username, '', '');
+    this.postService.getAllPosts(this.page.toString(), this.perPage.toString(), searchData).subscribe(
       (response => {
         console.log(response);
         this.posts = response;
@@ -49,8 +56,8 @@ export class UserProfileComponent implements OnInit {
 
   loadMorePosts() {
     this.page += 1;
-
-    this.postService.getUserPosts(this.page.toString(), this.perPage.toString(), localStorage.getItem('jwt')).subscribe(
+    const searchData = new SearchData('', this.user.username, '', '');
+    this.postService.getAllPosts(this.page.toString(), this.perPage.toString(), searchData).subscribe(
       (response => {
         console.log(response);
         this.posts = this.posts.concat(response);
@@ -101,6 +108,22 @@ export class UserProfileComponent implements OnInit {
 
   deletePost(post: Post) {
     this.posts = this.posts.filter(x => x !== post);
+  }
+
+  checkAuthor() {
+    const jwt = localStorage.getItem('jwt');
+
+    if (jwt === null) {
+      return false;
+    }
+
+    const pt = JSON.parse(window.atob(jwt.split('.')[1]));
+
+    if (pt.username === this.user.username) {
+      return true;
+    }
+
+    return false;
   }
 
 }

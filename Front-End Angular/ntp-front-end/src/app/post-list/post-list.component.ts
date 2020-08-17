@@ -3,6 +3,7 @@ import { Post } from '../models/post';
 import { SearchData } from '../models/search-data';
 import { PostService } from '../services/post.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Constants } from '../services/constants';
 
 @Component({
   selector: 'app-post-list',
@@ -11,11 +12,11 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class PostListComponent implements OnInit {
 
-  constructor(private postService: PostService, private formBuilder: FormBuilder) { }
+  constructor(private postService: PostService, private formBuilder: FormBuilder, private constants: Constants) { }
 
   @Input() searchData: SearchData;
   page = 0;
-  perPage = 2;
+  perPage = this.constants.perPage;
   posts: Post[];
   searchWindow = false;
   searchBtn = true;

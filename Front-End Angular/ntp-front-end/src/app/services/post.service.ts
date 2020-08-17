@@ -18,7 +18,7 @@ export class PostService {
       perPage
     });
 
-    return this.http.get<Post[]>(this.constants.searchPostPort + '/post/api?category=' + searchData.category
+    return this.http.get<Post[]>(this.constants.searchPostPort + '/post?category=' + searchData.category
     + '&username=' + searchData.username + '&type=' + searchData.type + '&title=' + searchData.title, { headers });
   }
 
@@ -29,7 +29,7 @@ export class PostService {
       jwt
     });
 
-    return this.http.get<Post[]>(this.constants.searchPostPort + '/post/api/user-posts', { headers });
+    return this.http.get<Post[]>(this.constants.searchPostPort + '/post/user-posts', { headers });
   }
 
   public addPost(post: Post): Observable<Post> {
@@ -37,7 +37,7 @@ export class PostService {
       jwt: localStorage.getItem('jwt')
     });
 
-    return this.http.post<Post>(this.constants.postPort + '/post/api/', post, { headers });
+    return this.http.post<Post>(this.constants.postPort + '/post/', post, { headers });
   }
 
   public deletePost(id: string): Observable<string> {
@@ -45,7 +45,7 @@ export class PostService {
       jwt: localStorage.getItem('jwt')
     });
 
-    return this.http.delete<string>(this.constants.postPort + '/post/api/' + id, { headers });
+    return this.http.delete<string>(this.constants.postPort + '/post/' + id, { headers });
   }
 
   public uploadFile(data: FormData): Observable<void> {
@@ -53,21 +53,21 @@ export class PostService {
       jwt: localStorage.getItem('jwt')
     });
 
-    return this.http.post<void>(this.constants.postPort + '/post/api/file', data, { headers });
+    return this.http.post<void>(this.constants.postPort + '/post/file', data, { headers });
   }
 
   public getImage(id: string) {
 
-    return this.http.get(this.constants.postPort + '/post/api/image/' + id, { responseType: 'text' });
+    return this.http.get(this.constants.postPort + '/post/image/' + id, { responseType: 'text' });
   }
 
   public getVideo(id: string): string {
 
-    return this.constants.postPort + '/post/api/video/' + id;
+    return this.constants.postPort + '/post/video/' + id;
   }
 
   public getAudio(id: string): string {
 
-    return this.constants.postPort + '/post/api/audio/' + id;
+    return this.constants.postPort + '/post/audio/' + id;
   }
 }

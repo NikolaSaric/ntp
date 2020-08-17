@@ -19,7 +19,7 @@ export class PostComponent implements OnInit {
   image: string;
   video: string;
   audio: string;
-  @ViewChild("videoPlayer", { static: false }) videoplayer: ElementRef;
+  @ViewChild('videoPlayer', { static: false }) videoplayer: ElementRef;
   @Output() delete: EventEmitter<Post> = new EventEmitter();
   isPlay = false;
 

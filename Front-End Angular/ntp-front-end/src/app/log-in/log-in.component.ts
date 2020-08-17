@@ -43,7 +43,7 @@ export class LogInComponent implements OnInit {
 
           this.snackBar.open('Successfully logged in as: ' + this.username);
 
-          this.router.navigateByUrl('/profile');
+          this.router.navigateByUrl('/profile/' + this.username);
         }
       }),
       (error => {
