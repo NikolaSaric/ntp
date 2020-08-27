@@ -30,7 +30,10 @@ export class UserProfileComponent implements OnInit {
   hide = true;
 
   ngOnInit() {
-    this.getUser();
+    this.route.params.subscribe(routeParams => {
+      this.getUser();
+    });
+    
   }
 
   getUser() {
@@ -124,6 +127,10 @@ export class UserProfileComponent implements OnInit {
     }
 
     return false;
+  }
+
+  followBtnClick() {
+
   }
 
 }

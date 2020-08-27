@@ -4,6 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { EmbedVideoService } from 'ngx-embed-video';
 import { PostService } from '../services/post.service';
 import { MatSnackBar } from '@angular/material';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-post',
@@ -13,7 +14,7 @@ import { MatSnackBar } from '@angular/material';
 export class PostComponent implements OnInit {
 
   constructor(private dom: DomSanitizer, private embedService: EmbedVideoService,
-              private postService: PostService, private snackBar: MatSnackBar) { }
+              private postService: PostService, private snackBar: MatSnackBar, private router: Router) { }
 
   @Input() post: Post;
   image: string;
@@ -82,6 +83,10 @@ export class PostComponent implements OnInit {
         this.delete.emit(this.post);
       })
     );
+  }
+
+  goToProfile(username: string) {
+    this.router.navigate(['/profile/' + username]);
   }
 
 }

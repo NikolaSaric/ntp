@@ -5,11 +5,10 @@ from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
-import json
 
 app = Flask(__name__)
 
-cors = CORS(app)
+CORS(app)
 
 app.config['SECRET_KEY'] = 'MusicFlow'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@127.0.0.1:3306/ntp'
@@ -130,8 +129,6 @@ def get_user():
     username = request.args.get('username', None)
     if username is None or username == '':
         return make_response('Username not found', 404)
-
-
 
     user = User.query.filter_by(username=username).first()
 

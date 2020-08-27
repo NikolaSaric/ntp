@@ -1,7 +1,7 @@
 <mat-card class="post-card mat-card-cvr">
   <mat-card-header class="mat-card-title">
     <mat-card-title>{{post.title}}</mat-card-title>
-    <mat-card-subtitle>{{post.username}} | {{formatTags()}}</mat-card-subtitle>
+    <mat-card-subtitle><a (click)="goToProfile(post.username)">{{post.username}}</a> | {{formatTags()}}</mat-card-subtitle>
   </mat-card-header>
   <span>{{post.instruments}}</span>
   <div *ngIf="post.type === 'Link'">

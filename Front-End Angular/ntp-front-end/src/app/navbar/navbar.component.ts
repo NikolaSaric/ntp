@@ -42,5 +42,9 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/profile/' + pt.username]);
   }
 
+  addPost() {
+    this.router.navigate(['/add-post']);
+  }
+
 
 }
