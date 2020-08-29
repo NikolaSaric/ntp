@@ -22,26 +22,27 @@ video, audio, sliku ili link. Post servis se takođe koristi i za upload fajlova
 i samo vrši pretragu po raznim kriterijumima, uz primenu paginacije. Odlučio sam se da pretragu odradim u Python-u jer je za razliku od GoLang-a dosta kraća, čitkija 
 i jednostavnija sintaksa za pretragu.
 
-4) Comment Servis - Servis za čuvanje i dobavljanje komentara, svaka objava može imati komentar, sem ako autor to nije eksplicitno zabranio.
-Komentar može imati svoje komentare. Komentar može sadržati tekst ili link ka drugoj objavi.
+4) Comment Servis - GoLang mikroservis, MongoDB baza podataka. Servis za čuvanje i dobavljanje komentara, svaka objava može imati komentar, sem ako autor to nije eksplicitno zabranio. Komentar može imati svoje komentare (Nije implementirano). Komentar može sadržati tekst ili link ka drugoj objavi.
 
 5) Follow Servis - Servis za čuvanje praćenih korisnika. - jos nije detaljno razrađen, možda bude sklopljen sa User Servisom.
 
 6) Reaction Servis - Servis za čuvanje reakcija na objave - još nije detaljno razrađen, možda bude sklopljen sa Post Servisom.
+
+7) Angular Front-End Aplikacija - Monolitna Angular aplikacija koja komunicira sa back-end mikroservisima.
 
 Ostali servisi biće naknadno dodati i detaljno opisani, kao i način pokretanja projekta.
 
 # Osnovne funkcionalnosti koje planiram da implementiram:
 
 Korisnici:
-  1) Registracija;
-  2) Log In;
-  3) Pregled korisničkog profila / izmena;
+  1) Registracija - implementirano;
+  2) Log In - implementirano;
+  3) Pregled korisničkog profila / izmena - implementirano;
   
-  4) Dodavanje objava koje mogu da sadrže tekst, slike, video ili audio zapis;
-  5) Brisanje objave;
-  6) Pretraživanje svojih i tuđih objava po raznim kriterijumima;
-  7) Komentarisanje objava;
+  4) Dodavanje objava koje mogu da sadrže tekst, slike, video ili audio zapis - implementirano;
+  5) Brisanje objave - implementirano;
+  6) Pretraživanje svojih i tuđih objava po raznim kriterijumima - implementirano;
+  7) Komentarisanje objava - implementirano;
   8) Reakcije na objave;
   9) Praćenje ostalih korisnika;
   
