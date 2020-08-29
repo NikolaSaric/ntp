@@ -47,7 +47,7 @@ func InitDatabase() {
 	fmt.Println("Connected to Comment MongoDB!")
 }
 
-// Save : save new Comment to MongoDB
+// Save : save new comment to MongoDB
 func Save(comment *Comment) *mongo.InsertOneResult {
 
 	insertResult, err := collection.InsertOne(context.TODO(), comment)
@@ -59,8 +59,8 @@ func Save(comment *Comment) *mongo.InsertOneResult {
 
 }
 
-// GetByPostID : return Comment by Post ID
-func GetByPostID(id primitive.ObjectID) *mongo.Cursor {
+// GetByPostID : return comments by Post ID
+func GetByPostID(id string) []Comment {
 
 	result, err := collection.Find(context.TODO(), bson.M{"postid": id})
 
@@ -68,7 +68,12 @@ func GetByPostID(id primitive.ObjectID) *mongo.Cursor {
 		log.Fatal(err)
 	}
 
-	return result
+	var comments []Comment
+	if err := result.All(context.TODO(), &comments); err != nil {
+		log.Fatal(err)
+	}
+
+	return comments
 }
 
 // Update : update comment with new one

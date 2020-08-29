@@ -1,0 +1,16 @@
+<mat-card class="post-card mat-card-cvr">
+    <mat-card-header class="mat-card-title">
+      <mat-card-subtitle><a (click)="goToProfile(comment.author)">{{comment.author}}</a> | {{comment.createdOn | date:"MM/dd/yyyy hh:mm"}}
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        {{comment.body}}
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+
+    </mat-card-actions>
+  
+    
+  </mat-card>

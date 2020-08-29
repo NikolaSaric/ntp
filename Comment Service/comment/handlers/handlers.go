@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/NikolaSaric/ntp/Comment_Service/data"
+	"github.com/gorilla/mux"
 
 	"github.com/dgrijalva/jwt-go"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -24,7 +25,7 @@ func NewCommentHandler(l *log.Logger) *Comments {
 	return &Comments{l}
 }
 
-// AddComment :  add new comment to db
+// AddComment :  add new omment to db
 func (c *Comments) AddComment(rw http.ResponseWriter, r *http.Request) {
 	c.l.Println("POST Add Comment")
 
@@ -49,6 +50,7 @@ func (c *Comments) AddComment(rw http.ResponseWriter, r *http.Request) {
 
 	newComment.Author = claims["username"].(string)
 	newComment.CreatedOn = time.Now().UTC().String()
+	newComment.Replies = make([]data.Comment, 0)
 	newComment.ID = data.Save(&newComment).InsertedID.(primitive.ObjectID).Hex()
 	encoder := json.NewEncoder(rw)
 
@@ -56,7 +58,23 @@ func (c *Comments) AddComment(rw http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		c.l.Println(err)
 	}
+}
 
-	log.Println(newComment)
+// GetCommentsByPost : get comments by given post ID.
+func (c *Comments) GetCommentsByPost(rw http.ResponseWriter, r *http.Request) {
+	// Get post id from url path
+	vars := mux.Vars(r)
+	id := vars["id"]
+	c.l.Println("GET Comments: " + id)
 
+	results := data.GetByPostID(id)
+
+	c.l.Println(results)
+
+	encoder := json.NewEncoder(rw)
+
+	err := encoder.Encode(results)
+	if err != nil {
+		c.l.Println(err)
+	}
 }

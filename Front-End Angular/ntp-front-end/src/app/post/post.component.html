@@ -1,7 +1,8 @@
 <mat-card class="post-card mat-card-cvr">
   <mat-card-header class="mat-card-title">
     <mat-card-title>{{post.title}}</mat-card-title>
-    <mat-card-subtitle><a (click)="goToProfile(post.username)">{{post.username}}</a> | {{formatTags()}}</mat-card-subtitle>
+    <mat-card-subtitle><a (click)="goToProfile(post.username)">{{post.username}}</a> | {{formatTags()}}
+    </mat-card-subtitle>
   </mat-card-header>
   <span>{{post.instruments}}</span>
   <div *ngIf="post.type === 'Link'">
@@ -29,7 +30,23 @@
   </mat-card-content>
   <mat-card-actions>
     <button mat-button>LIKE</button>
-    <button mat-button>COMMENTS</button>
+    <button mat-button *ngIf="!commentsView" (click)="commentsBtnClick()">COMMENTS</button>
+    <button mat-button *ngIf="commentsView" (click)="hideCommentsBtnClick()">HIDE COMMENTS</button>
     <button mat-button *ngIf="checkAuthor()" (click)="deletePost()">DELETE</button>
   </mat-card-actions>
+
+  <div *ngIf="commentsView">
+
+    <app-comment [comment]="comment" *ngFor="let comment of comments"></app-comment>
+
+    <form class="form" [formGroup]="addCommentForm" (ngSubmit)="addCommentForm.valid && onAddCommentSubmit()" noval>
+
+      <mat-form-field>
+        <textarea matInput formControlName="body" placeholder="Comment on post">
+        </textarea>
+        <mat-error>Comment body is required, max 250 characters.</mat-error>
+      </mat-form-field>
+      <button mat-stroked-button color="primary" class="btn-block">Add Comment</button>
+    </form>
+  </div>
 </mat-card>

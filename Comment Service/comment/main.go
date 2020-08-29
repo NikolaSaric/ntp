@@ -25,7 +25,8 @@ func main() {
 
 	// create a new serve mux and register the handlers
 	sm := mux.NewRouter()
-	sm.HandleFunc("/comment/", ch.AddComment).Methods(http.MethodPost)
+	sm.HandleFunc("/comment", ch.AddComment).Methods(http.MethodPost)
+	sm.HandleFunc("/comment/post/{id}", ch.GetCommentsByPost).Methods(http.MethodGet)
 
 	// CORS
 	cf := cors.New(cors.Options{

@@ -18,6 +18,7 @@ import { AddPostComponent } from './add-post/add-post.component';
 import { EmbedVideo } from 'ngx-embed-video';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { PostListComponent } from './post-list/post-list.component';
+import { CommentComponent } from './comment/comment.component';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { PostListComponent } from './post-list/post-list.component';
     UserProfileComponent,
     AddPostComponent,
     PostListComponent,
+    CommentComponent,
   ],
   imports: [
     BrowserModule,
