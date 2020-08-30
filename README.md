@@ -42,7 +42,7 @@ Korisnici:
   5) Brisanje objave - implementirano;
   6) Pretraživanje svojih i tuđih objava po raznim kriterijumima - implementirano;
   7) Komentarisanje objava - implementirano;
-  8) Reakcije na objave;
+  8) Reakcije na objave - implementirano;
   9) Praćenje ostalih korisnika;
   
  Administratori:
