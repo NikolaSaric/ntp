@@ -29,6 +29,8 @@ func main() {
 	sm := mux.NewRouter()
 	sm.HandleFunc("/post/", ph.AddPost).Methods(http.MethodPost)
 	sm.HandleFunc("/post/{id}", ph.DeletePost).Methods(http.MethodDelete)
+	sm.HandleFunc("/post/like/{id}", ph.LikePost).Methods(http.MethodPut)
+	sm.HandleFunc("/post/unlike/{id}", ph.UnlikePost).Methods(http.MethodPut)
 	sm.HandleFunc("/post/file", fh.UploadFile).Methods(http.MethodPost)
 	sm.HandleFunc("/post/image/{id}", fh.GetImage).Methods(http.MethodGet)
 	sm.HandleFunc("/post/video/{id}", fh.GetVideo).Methods(http.MethodGet)

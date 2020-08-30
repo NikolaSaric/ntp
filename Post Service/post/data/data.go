@@ -22,6 +22,7 @@ type Post struct {
 	Location    string   `json:"location"`
 	Instruments []string `json:"instruments"`
 	Tags        []string `json:"tags"`
+	Likes       []string `json:"likes"`
 	CreatedOn   string   `json:"createdOn"`
 }
 
@@ -50,7 +51,7 @@ func InitDatabase() {
 	fmt.Println("Connected to MongoDB!")
 }
 
-// Save : Saves new post to MongoDB
+// Save : save new post to MongoDB
 func Save(post *Post) *mongo.InsertOneResult {
 
 	insertResult, err := collection.InsertOne(context.TODO(), post)
@@ -76,7 +77,7 @@ func Save(post *Post) *mongo.InsertOneResult {
 
 }
 
-// GetByID : returns entity by id
+// GetByID : return entity by id
 func GetByID(id primitive.ObjectID) *mongo.SingleResult {
 
 	result := collection.FindOne(context.TODO(), bson.M{"_id": id})
@@ -84,13 +85,43 @@ func GetByID(id primitive.ObjectID) *mongo.SingleResult {
 	return result
 }
 
-// Delete : deletes entity from db by id
+// Delete : delete entity from db by id
 func Delete(id primitive.ObjectID) *mongo.DeleteResult {
 
 	result, err := collection.DeleteOne(context.TODO(), bson.M{"_id": id})
 
 	if err != nil {
 		log.Fatal("DeleteOne() ERROR:", err)
+	}
+
+	return result
+}
+
+// AddLike : add username to the likes list for given post and user
+func AddLike(id primitive.ObjectID, username string) *mongo.UpdateResult {
+
+	result, err := collection.UpdateOne(
+		context.TODO(),
+		bson.M{"_id": id},
+		bson.M{"$push": bson.M{"likes": username}})
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return result
+}
+
+// RemoveLike : remove username to the likes list for given post and user
+func RemoveLike(id primitive.ObjectID, username string) *mongo.UpdateResult {
+
+	result, err := collection.UpdateOne(
+		context.TODO(),
+		bson.M{"_id": id},
+		bson.M{"$pull": bson.M{"likes": username}})
+
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	return result

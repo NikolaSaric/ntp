@@ -1,7 +1,7 @@
 export class Post {
 
     constructor(title: string, category: string, description: string, type: string,
-                location: string, instruments: string[], tags: string[]) {
+                location: string, instruments: string[], tags: string[], likes: string[]) {
         this.title = title;
         this.category = category;
         this.description = description;
@@ -9,6 +9,7 @@ export class Post {
         this.location = location;
         this.instruments = instruments;
         this.tags = tags;
+        this.likes = likes;
     }
 
     id: string;
@@ -20,5 +21,6 @@ export class Post {
     location: string;
     instruments: string[];
     tags: string[];
+    likes: string[];
     createdOn: string;
 }

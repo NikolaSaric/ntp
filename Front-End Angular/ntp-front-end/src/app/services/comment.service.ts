@@ -11,9 +11,9 @@ export class CommentService {
 
   constructor(private http: HttpClient, private constants: Constants) { }
 
-  public addComment(comment: Comment, jwt: string): Observable<Comment> {
+  public addComment(comment: Comment): Observable<Comment> {
     const headers: HttpHeaders = new HttpHeaders({
-      jwt
+      jwt: localStorage.getItem('jwt')
     });
 
     return this.http.post<Comment>(this.constants.commentPort + '/comment', comment, { headers });

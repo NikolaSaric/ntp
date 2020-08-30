@@ -79,7 +79,7 @@ export class AddPostComponent implements OnInit {
 
   onAddPostSubmit() {
 
-    const newPost = new Post(this.title, this.category, this.description, this.type, '', this.instruments, this.tags);
+    const newPost = new Post(this.title, this.category, this.description, this.type, '', this.instruments, this.tags, []);
 
     if (this.type === 'Link') {
       newPost.location = this.location;

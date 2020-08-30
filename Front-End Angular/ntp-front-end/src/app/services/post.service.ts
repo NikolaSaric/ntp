@@ -70,4 +70,20 @@ export class PostService {
 
     return this.constants.postPort + '/post/audio/' + id;
   }
+
+  public likePost(id: string) {
+    const headers: HttpHeaders = new HttpHeaders({
+      jwt: localStorage.getItem('jwt')
+    });
+
+    return this.http.put(this.constants.postPort + '/post/like/' + id, {}, { headers });
+  }
+
+  public unlikePost(id: string) {
+    const headers: HttpHeaders = new HttpHeaders({
+      jwt: localStorage.getItem('jwt')
+    });
+
+    return this.http.put(this.constants.postPort + '/post/unlike/' + id, {}, { headers });
+  }
 }

@@ -27,25 +27,26 @@ func NewPosts(l *log.Logger) *Posts {
 	return &Posts{l}
 }
 
+func (p *Posts) parseJWT(r *http.Request) jwt.MapClaims {
+	tokenString := r.Header.Get("jwt")
+	claims := jwt.MapClaims{}
+
+	jwt.ParseWithClaims(tokenString, &claims, func(token *jwt.Token) (interface{}, error) {
+		return []byte(secret), nil
+	})
+
+	return claims
+}
+
 // AddPost adds new post to db
 func (p *Posts) AddPost(rw http.ResponseWriter, r *http.Request) {
 	p.l.Println("POST Add Post")
 
-	tokenString := r.Header.Get("jwt")
-	claims := jwt.MapClaims{}
+	claims := p.parseJWT(r)
 
-	_, err := jwt.ParseWithClaims(tokenString, &claims, func(token *jwt.Token) (interface{}, error) {
-		return []byte(secret), nil
-	})
-
-	if err != nil {
-		p.l.Println(err)
-
-		return
-	}
 	decoder := json.NewDecoder(r.Body)
 	var newPost data.Post
-	err = decoder.Decode(&newPost)
+	err := decoder.Decode(&newPost)
 	if err != nil {
 		p.l.Println(err)
 	}
@@ -68,18 +69,7 @@ func (p *Posts) AddPost(rw http.ResponseWriter, r *http.Request) {
 func (p *Posts) DeletePost(rw http.ResponseWriter, r *http.Request) {
 	p.l.Println("DELETE post")
 
-	tokenString := r.Header.Get("jwt")
-	claims := jwt.MapClaims{}
-
-	_, err := jwt.ParseWithClaims(tokenString, &claims, func(token *jwt.Token) (interface{}, error) {
-		return []byte(secret), nil
-	})
-
-	if err != nil {
-		p.l.Println(err)
-
-		return
-	}
+	claims := p.parseJWT(r)
 
 	// Get Post id from url path
 	vars := mux.Vars(r)
@@ -94,6 +84,7 @@ func (p *Posts) DeletePost(rw http.ResponseWriter, r *http.Request) {
 	var post data.Post
 	data.GetByID(idPrimitive).Decode(&post)
 
+	// Check post ownership
 	if post.Username == claims["username"].(string) {
 		deleteResult := data.Delete(idPrimitive)
 
@@ -106,6 +97,7 @@ func (p *Posts) DeletePost(rw http.ResponseWriter, r *http.Request) {
 			p.l.Println(err)
 		}
 
+		// Delete file connected to the post
 		switch post.Type {
 		case "Image":
 			err = os.Remove(filepath.Join(absPath, "resources", "images", id))
@@ -124,6 +116,50 @@ func (p *Posts) DeletePost(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	rw.Write([]byte("You don't have permission to delete this post."))
+	return
+
+}
+
+// LikePost : add username to post likes
+func (p *Posts) LikePost(rw http.ResponseWriter, r *http.Request) {
+	p.l.Println("PUT like post")
+
+	// Get Post id from url path
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	// Transforms string id to PrimitiveId
+	idPrimitive, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		log.Fatal("primitive.ObjectIDFromHex ERROR:", err)
+	}
+
+	claims := p.parseJWT(r)
+
+	data.AddLike(idPrimitive, claims["username"].(string))
+
+	return
+
+}
+
+// UnlikePost : remove username from post likes
+func (p *Posts) UnlikePost(rw http.ResponseWriter, r *http.Request) {
+	p.l.Println("PUT unlike post")
+
+	// Get Post id from url path
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	// Transforms string id to PrimitiveId
+	idPrimitive, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		log.Fatal("primitive.ObjectIDFromHex ERROR:", err)
+	}
+
+	claims := p.parseJWT(r)
+
+	data.RemoveLike(idPrimitive, claims["username"].(string))
+
 	return
 
 }

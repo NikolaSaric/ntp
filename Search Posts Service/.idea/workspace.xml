@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c40b0f54-0b4b-4a5b-802e-e32f08daa55e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../Front-End Angular/ntp-front-end/src/app/add-post/add-post.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End Angular/ntp-front-end/src/app/add-post/add-post.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End Angular/ntp-front-end/src/app/models/post.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End Angular/ntp-front-end/src/app/models/post.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Post Service/post/data/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/../Post Service/post/data/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -15,8 +18,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
-              <caret line="50" selection-start-line="50" selection-end-line="50" />
+            <state relative-caret-position="800">
+              <caret line="40" lean-forward="true" selection-start-line="40" selection-end-line="40" />
               <folding>
                 <element signature="e#0#56#0" expanded="true" />
               </folding>
@@ -55,7 +58,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -67,6 +69,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -128,9 +131,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.099075295" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.072655216" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -152,8 +156,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="50" selection-start-line="50" selection-end-line="50" />
+        <state relative-caret-position="800">
+          <caret line="40" lean-forward="true" selection-start-line="40" selection-end-line="40" />
           <folding>
             <element signature="e#0#56#0" expanded="true" />
           </folding>

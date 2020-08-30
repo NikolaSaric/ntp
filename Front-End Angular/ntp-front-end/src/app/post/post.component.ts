@@ -137,13 +137,49 @@ export class PostComponent implements OnInit {
     const newComment = new Comment(this.body);
     newComment.postID = this.post.id;
 
-    this.commentService.addComment(newComment, localStorage.getItem('jwt')).subscribe(
+    this.commentService.addComment(newComment).subscribe(
       (response => {
         this.comments.push(response);
         this.createCommentForm();
       })
     );
 
+  }
+
+  likeBtnClick() {
+    this.postService.likePost(this.post.id).subscribe(
+      (response => {
+        const jwt = localStorage.getItem('jwt');
+        const pt = JSON.parse(window.atob(jwt.split('.')[1]));
+        this.post.likes.push(pt.username);
+      })
+    );
+  }
+
+  unlikeBtnClick() {
+    this.postService.unlikePost(this.post.id).subscribe(
+      (response => {
+        const jwt = localStorage.getItem('jwt');
+        const pt = JSON.parse(window.atob(jwt.split('.')[1]));
+        this.post.likes.splice(this.post.likes.indexOf(pt.username), 1);
+      })
+    );
+  }
+
+  checkIfLiked() {
+    const jwt = localStorage.getItem('jwt');
+
+    if (jwt === null) {
+      return false;
+    }
+
+    const pt = JSON.parse(window.atob(jwt.split('.')[1]));
+
+    if (this.post.likes.includes(pt.username)) {
+      return true;
+    }
+
+    return false;
   }
 
 }
