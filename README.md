@@ -10,9 +10,11 @@ Back-end je baziran na arhitekturi mikroservisa napisanih u Python i GoLang prog
 
 # Plan izrade projekta:
 
-1) User servis - Python + Flask mikroservis aplikacija, MySQL baza podataka. Servis za registraciju i prijavljivanje korisnika.
+1) User servis - Python + Flask mikroservis aplikacija, MySQL baza podataka. Servis za registraciju, prijavljivanje i praćenje korisnika.
 Nakon uspesne registracije korisniku treba da stigne email preko koga treba da verifikuje unetu email adresu, tada mu se aktivira nalog i može da se uloguje.
 Nakon uspešnog prijavljivanja korisniku se generiše JWT token, koji se koristi za dalju autentikaciju korisnika u ostalim mikroservisima.
+
+Follow funkcionalnost je implementirana u User servisu, korisnik može da prati druge korisnike i prati njihove objave.
 
 2) Post Servis - GoLang mikroservis, MongoDB baza podataka. Servis za postavljanje i dobavljanje korisničkih objava.
 Korisnička objava može sadržati naslov, jednu od ponuđenih kategorija, tagove, deskripciju, listu instrumenata, i jedan od sledećih fajlova
@@ -24,8 +26,6 @@ i samo vrši pretragu po raznim kriterijumima, uz primenu paginacije. Odlučio s
 i jednostavnija sintaksa za pretragu.
 
 4) Comment Servis - GoLang mikroservis, MongoDB baza podataka. Servis za čuvanje i dobavljanje komentara, svaka objava može imati komentar, sem ako autor to nije eksplicitno zabranio. Komentar može imati svoje komentare (Nije implementirano). Komentar može sadržati tekst ili link ka drugoj objavi.
-
-5) Follow Servis - Servis za čuvanje praćenih korisnika. - jos nije detaljno razrađen, možda bude sklopljen sa User Servisom.
 
 6) Angular Front-End Aplikacija - Monolitna Angular aplikacija koja komunicira sa back-end mikroservisima.
 
@@ -43,7 +43,7 @@ Korisnici:
   6) Pretraživanje svojih i tuđih objava po raznim kriterijumima - implementirano;
   7) Komentarisanje objava - implementirano;
   8) Reakcije na objave - implementirano;
-  9) Praćenje ostalih korisnika;
+  9) Praćenje ostalih korisnika - implementirano; 
   
  Administratori:
   10) Uklanjanje korisničkih objava;
