@@ -17,7 +17,8 @@
         <mat-card-actions>
             <button mat-button *ngIf="checkAuthor()" (click)="changePasswordBtnClick()">Change Password</button>
             <button mat-button *ngIf="checkAuthor()">Edit Info</button>
-            <button mat-button *ngIf="!checkAuthor()" (click)="followBtnClick()">Follow</button>
+            <button mat-button *ngIf="!checkAuthor() && !following" (click)="followBtnClick()">Follow</button>
+            <button mat-button *ngIf="!checkAuthor() && following" (click)="unfollowBtnClick()">Unfollow</button>
         </mat-card-actions>
     </mat-card>
 

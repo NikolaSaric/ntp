@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import relationship
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
@@ -15,8 +16,13 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@127.0.
 
 db = SQLAlchemy(app)
 
+follow_table = db.Table('followers',
+            db.Column('following_id', db.Integer, db.ForeignKey('user.id')),
+            db.Column('follower_id', db.Integer, db.ForeignKey('user.id'))
+            )
 
 class User(db.Model):
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(30), unique=True, nullable=False)
     full_name = db.Column(db.String(50), nullable=False)
@@ -26,6 +32,12 @@ class User(db.Model):
     confirmed_email = db.Column(db.Boolean)
     admin = db.Column(db.Boolean)
     registration_date = db.Column(db.Date)
+    following = relationship('User',
+                                secondary=follow_table,
+                                primaryjoin=(follow_table.c.following_id == id),
+                                secondaryjoin=(follow_table.c.follower_id == id),
+                                backref=db.backref('followers', lazy='dynamic'),
+                                lazy='dynamic')
 
     @property
     def serialize(self):
@@ -37,7 +49,9 @@ class User(db.Model):
             'email': self.email,
             'description': self.description,
             'admin': self.admin,
-            'registrationDate': dump_datetime(self.registration_date)
+            'registrationDate': dump_datetime(self.registration_date),
+            'following': list(map(lambda x: x[1], db.session.execute(self.following).fetchall()))
+
         }
 
 
@@ -85,12 +99,14 @@ def log_in():
             {'username': user.username, 'full_name': user.full_name, 'email': user.email,
              'description': user.description, 'admin': user.admin,
              'registration_date': str(user.registration_date),
-             'exp': datetime.utcnow() + timedelta(days=2)},
+             'exp': datetime.utcnow() + timedelta(days=2),
+             'following': list(map(lambda x: x[1], db.session.execute(user.following).fetchall()))},
             app.config['SECRET_KEY'])
 
         return jsonify({'token': token.decode('UTF-8')})
 
-    return make_response('Username and password do not match', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
+    return make_response('Username and password do not match', 401,
+                         {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
 
 @app.route('/user/change-password', methods=['POST'])
@@ -133,6 +149,60 @@ def get_user():
     user = User.query.filter_by(username=username).first()
 
     return jsonify(user.serialize)
+
+
+@app.route('/user/follow', methods=['GET'])
+def get_following():
+    token = request.headers.get('jwt')
+
+    decoded_jwt = jwt.decode(token, app.config['SECRET_KEY'])
+
+    user = User.query.filter_by(username=decoded_jwt.get('username')).first()
+
+    if not user:
+        return make_response('User not logged in', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
+
+    return jsonify(list(map(lambda x: x[1], db.session.execute(user.following).fetchall())))
+
+
+
+
+
+@app.route('/user/follow', methods=['PUT'])
+def follow_user():
+    data = request.get_json()
+    token = request.headers.get('jwt')
+
+    decoded_jwt = jwt.decode(token, app.config['SECRET_KEY'])
+
+    user = User.query.filter_by(username=decoded_jwt.get('username')).first()
+
+    if not user:
+        return make_response('User not logged in', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
+
+    follow_user = User.query.filter_by(username=data['username']).first()
+
+    if not follow_user:
+        return make_response('Username not found', 404, {'WWW-Authenticate': 'Basic realm="Login required!"'})
+
+    if data['follow']:
+        user.following.append(follow_user)
+    elif not data['follow']:
+        user.following.remove(follow_user)
+    else:
+        return make_response('Bad request', 400, {'WWW-Authenticate': 'Basic realm="Login required!"'})
+
+    try:
+        db.session.commit()
+
+    except SQLAlchemyError as e:
+        error = str(e.__dict__['orig'])
+        return error
+
+    if data['follow']:
+        return make_response(str('Started following ' + data['username']), 200)
+    elif not data['follow']:
+        return make_response(str('Unfollowed ' + data['username']), 200)
 
 
 if __name__ == '__main__':

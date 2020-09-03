@@ -9,6 +9,7 @@ import { ChangePasswordInfo } from '../models/change-password-info';
 import { Constants } from '../services/constants';
 import { ActivatedRoute } from '@angular/router';
 import { SearchData } from '../models/search-data';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-user-profile',
@@ -28,19 +29,18 @@ export class UserProfileComponent implements OnInit {
   changePasswordWindow: boolean;
   changePasswordForm: FormGroup;
   hide = true;
+  following: boolean;
 
   ngOnInit() {
     this.route.params.subscribe(routeParams => {
       this.getUser();
     });
-    
+    this.checkIfFollowing();
   }
 
   getUser() {
-    console.log(this.route.snapshot.paramMap.get('username'));
     this.userService.getUser(this.route.snapshot.paramMap.get('username')).subscribe(
       (response => {
-        console.log(response);
         this.user = response;
         this.getAllPosts();
       })
@@ -51,7 +51,6 @@ export class UserProfileComponent implements OnInit {
     const searchData = new SearchData('', this.user.username, '', '');
     this.postService.getAllPosts(this.page.toString(), this.perPage.toString(), searchData).subscribe(
       (response => {
-        console.log(response);
         this.posts = response;
       })
     );
@@ -62,11 +61,9 @@ export class UserProfileComponent implements OnInit {
     const searchData = new SearchData('', this.user.username, '', '');
     this.postService.getAllPosts(this.page.toString(), this.perPage.toString(), searchData).subscribe(
       (response => {
-        console.log(response);
         this.posts = this.posts.concat(response);
       })
     );
-    console.log(this.posts);
   }
 
   get oldPassword() { return this.changePasswordForm.controls.oldPassword.value as string; }
@@ -88,8 +85,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   onChangePasswordubmit() {
-    console.log(this.newPassword);
-    console.log(this.oldPassword);
     if (this.newPassword !== this.repeatedPassword) {
       this.snackBar.open('New password and repeated password do not much.');
       return;
@@ -130,7 +125,46 @@ export class UserProfileComponent implements OnInit {
   }
 
   followBtnClick() {
-
+    this.userService.followUser(this.user.username, true).subscribe(
+      (response => {
+        this.checkIfFollowing();
+        this.snackBar.open(response);
+      }),
+      (error => {
+        console.log('err');
+        console.log(error);
+      })
+    );
   }
 
+  unfollowBtnClick() {
+    this.userService.followUser(this.user.username, false).subscribe(
+      (response => {
+        this.checkIfFollowing();
+        this.snackBar.open(response);
+      }),
+      (error => {
+        console.log('err');
+        console.log(error);
+      })
+    );
+  }
+
+  checkIfFollowing() {
+    this.userService.getFollowing().subscribe(
+      (response => {
+        if (response.includes(this.route.snapshot.paramMap.get('username'))) {
+          this.following = true;
+        } else {
+          this.following = false;
+        }
+        return;
+      }),
+      (error => {
+        console.log('err');
+        console.log(error);
+        return false;
+      })
+    );
+  }
 }

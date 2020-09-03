@@ -39,4 +39,22 @@ export class UserService {
 
     return this.http.get<User>(this.constants.userPort + '/user?username=' + username);
   }
+
+  public followUser(username: string, follow: boolean): Observable<string> {
+    const headers: HttpHeaders = new HttpHeaders({
+      jwt: localStorage.getItem('jwt')
+    });
+    headers.set('Content-Type', 'text/plain; charset=utf-8');
+
+    return this.http.put<string>(this.constants.userPort + '/user/follow', {username, follow}, { headers, responseType: 'text' as 'json' });
+  }
+
+  public getFollowing(): Observable<string[]> {
+    const headers: HttpHeaders = new HttpHeaders({
+      jwt: localStorage.getItem('jwt')
+    });
+
+    return this.http.get<string[]>(this.constants.userPort + '/user/follow', { headers });
+
+  }
 }
