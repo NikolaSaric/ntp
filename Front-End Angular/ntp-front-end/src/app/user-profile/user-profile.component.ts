@@ -48,7 +48,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   getAllPosts() {
-    const searchData = new SearchData('', this.user.username, '', '');
+    const searchData = new SearchData('', this.user.username, '', '', 'false', []);
     this.postService.getAllPosts(this.page.toString(), this.perPage.toString(), searchData).subscribe(
       (response => {
         this.posts = response;
@@ -58,7 +58,7 @@ export class UserProfileComponent implements OnInit {
 
   loadMorePosts() {
     this.page += 1;
-    const searchData = new SearchData('', this.user.username, '', '');
+    const searchData = new SearchData('', this.user.username, '', '', 'false', []);
     this.postService.getAllPosts(this.page.toString(), this.perPage.toString(), searchData).subscribe(
       (response => {
         this.posts = this.posts.concat(response);

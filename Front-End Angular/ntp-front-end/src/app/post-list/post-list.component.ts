@@ -4,6 +4,7 @@ import { SearchData } from '../models/search-data';
 import { PostService } from '../services/post.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Constants } from '../services/constants';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-post-list',
@@ -12,7 +13,8 @@ import { Constants } from '../services/constants';
 })
 export class PostListComponent implements OnInit {
 
-  constructor(private postService: PostService, private formBuilder: FormBuilder, private constants: Constants) { }
+  constructor(private postService: PostService, private formBuilder: FormBuilder,
+              private constants: Constants, private userService: UserService) { }
 
   @Input() searchData: SearchData;
   page = 0;
@@ -25,6 +27,8 @@ export class PostListComponent implements OnInit {
 
 
   ngOnInit() {
+      this.searchData.following = 'false';
+      this.searchData.followingList = [];
       this.getAllPosts();
       this.createSearchForm();
   }
@@ -33,18 +37,19 @@ export class PostListComponent implements OnInit {
     this.searchForm =  this.formBuilder.group({
       type: [''],
       username: [''],
-      title: ['']
+      title: [''],
+      following: [false]
     });
   }
 
   get title() { return this.searchForm.controls.title.value as string; }
   get username() { return this.searchForm.controls.username.value as string; }
   get type() { return this.searchForm.controls.type.value as string; }
+  get following() { return this.searchForm.controls.following.value as string; }
 
   getAllPosts() {
     this.postService.getAllPosts(this.page.toString(), this.perPage.toString(), this.searchData).subscribe(
       (response => {
-        console.log(response);
         this.posts = response;
       })
     );
@@ -55,7 +60,6 @@ export class PostListComponent implements OnInit {
 
     this.postService.getAllPosts(this.page.toString(), this.perPage.toString(), this.searchData).subscribe(
       (response => {
-        console.log(response);
         this.posts = this.posts.concat(response);
       })
     );
@@ -85,11 +89,27 @@ export class PostListComponent implements OnInit {
     this.searchData.title = this.title;
     this.searchData.type = this.type;
     this.searchData.username = this.username;
+    this.searchData.following = this.following;
 
-    this.page = 0;
-    this.perPage = 2;
+    if (this.following) {
+      this.userService.getFollowing().subscribe(
+        (response => {
+          this.searchData.followingList = response;
 
-    this.getAllPosts();
+          this.page = 0;
+          this.perPage = 2;
+
+          this.getAllPosts();
+        })
+      );
+    } else {
+      this.searchData.followingList = [];
+
+      this.page = 0;
+      this.perPage = 2;
+
+      this.getAllPosts();
+    }
   }
 
 }

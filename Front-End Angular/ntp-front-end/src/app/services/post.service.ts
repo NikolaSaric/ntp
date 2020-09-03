@@ -19,7 +19,8 @@ export class PostService {
     });
 
     return this.http.get<Post[]>(this.constants.searchPostPort + '/post?category=' + searchData.category
-    + '&username=' + searchData.username + '&type=' + searchData.type + '&title=' + searchData.title, { headers });
+    + '&username=' + searchData.username + '&type=' + searchData.type + '&title=' + searchData.title +
+     '&following=' + searchData.following + '&followingList=' + searchData.followingList, { headers });
   }
 
   public getUserPosts(page: string, perPage: string, jwt: string): Observable<Post[]> {

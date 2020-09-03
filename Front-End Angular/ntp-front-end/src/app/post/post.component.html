@@ -30,7 +30,7 @@
   </mat-card-content>
   <mat-card-actions>
     <button mat-button *ngIf="!checkIfLiked()" (click)="likeBtnClick()">LIKE</button>
-    <button mat-button *ngIf="checkIfLiked()" (click)="unlikeBtnClick()">LIKED</button>
+    <button mat-button *ngIf="checkIfLiked()" (click)="unlikeBtnClick()">UNLIKE</button>
     <button mat-button *ngIf="!commentsView" (click)="commentsBtnClick()">COMMENTS</button>
     <button mat-button *ngIf="commentsView" (click)="hideCommentsBtnClick()">HIDE COMMENTS</button>
     <button mat-button *ngIf="checkAuthor()" (click)="deletePost()">DELETE</button>

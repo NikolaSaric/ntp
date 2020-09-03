@@ -2,12 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c40b0f54-0b4b-4a5b-802e-e32f08daa55e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../Front-End Angular/ntp-front-end/src/app/models/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End Angular/ntp-front-end/src/app/models/user.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End Angular/ntp-front-end/src/app/services/user.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End Angular/ntp-front-end/src/app/services/user.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front-End Angular/ntp-front-end/src/app/user-profile/user-profile.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End Angular/ntp-front-end/src/app/user-profile/user-profile.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End Angular/ntp-front-end/src/app/add-post/add-post.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End Angular/ntp-front-end/src/app/add-post/add-post.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End Angular/ntp-front-end/src/app/models/search-data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End Angular/ntp-front-end/src/app/models/search-data.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End Angular/ntp-front-end/src/app/post-list/post-list.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End Angular/ntp-front-end/src/app/post-list/post-list.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End Angular/ntp-front-end/src/app/post-list/post-list.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End Angular/ntp-front-end/src/app/post-list/post-list.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front-End Angular/ntp-front-end/src/app/post/post.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End Angular/ntp-front-end/src/app/post/post.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Front-End Angular/ntp-front-end/src/app/user-profile/user-profile.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Front-End Angular/ntp-front-end/src/app/user-profile/user-profile.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../User Service/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/../User Service/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,8 +21,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="99">
-              <caret line="40" selection-start-line="40" selection-end-line="40" />
+            <state relative-caret-position="260">
+              <caret line="49" column="52" selection-start-line="49" selection-start-column="52" selection-end-line="49" selection-end-column="52" />
               <folding>
                 <element signature="e#0#56#0" expanded="true" />
               </folding>
@@ -158,8 +159,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="99">
-          <caret line="40" selection-start-line="40" selection-end-line="40" />
+        <state relative-caret-position="260">
+          <caret line="49" column="52" selection-start-line="49" selection-start-column="52" selection-end-line="49" selection-end-column="52" />
           <folding>
             <element signature="e#0#56#0" expanded="true" />
           </folding>

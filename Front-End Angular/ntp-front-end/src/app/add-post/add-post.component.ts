@@ -92,10 +92,6 @@ export class AddPostComponent implements OnInit {
         formData.append('file', this.file.files[0]);
         formData.append('type', this.type);
 
-        // Get extension from file name
-        const extension = this.file.files[0].name.split('.');
-        formData.append('extension', extension[extension.length - 1]);
-
         formData.append('fileName', response.id);
         this.postService.uploadFile(formData).subscribe(() => {
         }, err => {

@@ -47,6 +47,16 @@ def get_posts_by_search_data():
     if username is not None and username != '':
         search_data['username'] = username
 
+    following = request.args.get('following', False)
+
+    if following == 'true' and (username is None or username == ''):
+        following_list = request.args.get('followingList', [])
+        if following_list:
+            make_list = following_list.split(',')
+            search_data['username'] = {'$in': make_list}
+
+
+
     return dumps(list(mongo.db.post.find(search_data).skip(page * per_page).limit(per_page).sort("_id", -1)))
 
 
