@@ -16,12 +16,12 @@ export class HomeComponent implements OnInit {
   perPage = 2;
   posts: Post[];
 
-  searchByFeed = new SearchData('', '', '', '');
-  searchBySong = new SearchData('Song', '', '', '');
-  searchByImprove = new SearchData('Improve', '', '', '');
-  searchByLesson = new SearchData('Lesson', '', '', '');
-  searchByChallenge = new SearchData('Challenge', '', '', '');
-  searchByDiscussion = new SearchData('Discussion', '', '', '');
+  searchByFeed = new SearchData('', '', '', '', 'false', []);
+  searchBySong = new SearchData('Song', '', '', '', 'false', []);
+  searchByImprove = new SearchData('Improve', '', '', '', 'false', []);
+  searchByLesson = new SearchData('Lesson', '', '', '', 'false', []);
+  searchByChallenge = new SearchData('Challenge', '', '', '', 'false', []);
+  searchByDiscussion = new SearchData('Discussion', '', '', '', 'false', []);
 
   ngOnInit() {
   }

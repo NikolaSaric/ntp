@@ -1,208 +1,41 @@
-from flask import Flask, request, jsonify, make_response
-from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import relationship
-from datetime import datetime, timedelta
-from werkzeug.security import generate_password_hash, check_password_hash
-import jwt
+from flask import request
+from config import get_db, get_app
+import user
+import auth
+import following
 
-app = Flask(__name__)
-
-CORS(app)
-
-app.config['SECRET_KEY'] = 'MusicFlow'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@127.0.0.1:3306/ntp'
-
-db = SQLAlchemy(app)
-
-follow_table = db.Table('followers',
-            db.Column('following_id', db.Integer, db.ForeignKey('user.id')),
-            db.Column('follower_id', db.Integer, db.ForeignKey('user.id'))
-            )
-
-class User(db.Model):
-    __tablename__ = 'user'
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(30), unique=True, nullable=False)
-    full_name = db.Column(db.String(50), nullable=False)
-    password = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(30), nullable=False)
-    description = db.Column(db.String(250), nullable=True)
-    confirmed_email = db.Column(db.Boolean)
-    admin = db.Column(db.Boolean)
-    registration_date = db.Column(db.Date)
-    following = relationship('User',
-                                secondary=follow_table,
-                                primaryjoin=(follow_table.c.following_id == id),
-                                secondaryjoin=(follow_table.c.follower_id == id),
-                                backref=db.backref('followers', lazy='dynamic'),
-                                lazy='dynamic')
-
-    @property
-    def serialize(self):
-        """Return object data in easily serializable format"""
-        return {
-            'id': self.id,
-            'username': self.username,
-            'fullName': self.full_name,
-            'email': self.email,
-            'description': self.description,
-            'admin': self.admin,
-            'registrationDate': dump_datetime(self.registration_date),
-            'following': list(map(lambda x: x[1], db.session.execute(self.following).fetchall()))
-
-        }
-
-
-def dump_datetime(value):
-    if value is None:
-        return None
-    return value.strftime("%m-%d-%Y")
+app = get_app()
+db = get_db()
 
 
 @app.route('/auth/register', methods=['POST'])
 def register():
-    data = request.get_json()
-
-    hashed_password = generate_password_hash(data['password'], method='SHA256')
-
-    new_user = User(username=data['username'], full_name=data['full_name'], password=hashed_password,
-                    email=data['email'], description=data['description'], confirmed_email=False,
-                    admin=False, registration_date=datetime.now())
-    db.session.add(new_user)
-
-    try:
-        db.session.commit()
-
-    except SQLAlchemyError as e:
-        error = str(e.__dict__['orig'])
-        return error
-
-    return 'Successfully registered as: ' + new_user.username + ' , please verify your email: ' + new_user.email
+    return auth.register(request, db)
 
 
 @app.route('/auth/log-in', methods=['GET'])
 def log_in():
-    auth = request.authorization
-
-    if not auth or not auth.username or not auth.password:
-        return make_response('Missing username or password', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
-
-    user = User.query.filter_by(username=auth.username).first()
-
-    if not user:
-        return make_response('Not existing username', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
-
-    if check_password_hash(user.password, auth.password):
-        token = jwt.encode(
-            {'username': user.username, 'full_name': user.full_name, 'email': user.email,
-             'description': user.description, 'admin': user.admin,
-             'registration_date': str(user.registration_date),
-             'exp': datetime.utcnow() + timedelta(days=2),
-             'following': list(map(lambda x: x[1], db.session.execute(user.following).fetchall()))},
-            app.config['SECRET_KEY'])
-
-        return jsonify({'token': token.decode('UTF-8')})
-
-    return make_response('Username and password do not match', 401,
-                         {'WWW-Authenticate': 'Basic realm="Login required!"'})
+    return auth.log_in(request, db, app.config['SECRET_KEY'])
 
 
 @app.route('/user/change-password', methods=['POST'])
 def change_password():
-    data = request.get_json()
-    token = request.headers.get('jwt')
-
-    decoded_jwt = jwt.decode(token, app.config['SECRET_KEY'])
-
-    if data['newPassword'] != data['repeatedPassword']:
-        return make_response('New password does not much repeated password', 401)
-
-    user = User.query.filter_by(username=decoded_jwt.get('username')).first()
-
-    if not user:
-        return make_response('Not existing username', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
-
-    if check_password_hash(user.password, data['oldPassword']):
-        user.password = generate_password_hash(data['newPassword'], method='SHA256')
-
-        try:
-            db.session.commit()
-
-        except SQLAlchemyError as e:
-            error = str(e.__dict__['orig'])
-            return error
-
-        return 'Successfully changed password'
-
-    return make_response('Username and password do not match', 401,
-                         {'WWW-Authenticate': 'Basic realm="Login required!"'})
+    return user.change_password(request, db, app.config['SECRET_KEY'])
 
 
 @app.route('/user', methods=['GET'])
 def get_user():
-    username = request.args.get('username', None)
-    if username is None or username == '':
-        return make_response('Username not found', 404)
-
-    user = User.query.filter_by(username=username).first()
-
-    return jsonify(user.serialize)
+    return user.get_user(request)
 
 
 @app.route('/user/follow', methods=['GET'])
 def get_following():
-    token = request.headers.get('jwt')
-
-    decoded_jwt = jwt.decode(token, app.config['SECRET_KEY'])
-
-    user = User.query.filter_by(username=decoded_jwt.get('username')).first()
-
-    if not user:
-        return make_response('User not logged in', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
-
-    return jsonify(list(map(lambda x: x[1], db.session.execute(user.following).fetchall())))
-
-
-
+    return following.get_following(request, db, app.config['SECRET_KEY'])
 
 
 @app.route('/user/follow', methods=['PUT'])
 def follow_user():
-    data = request.get_json()
-    token = request.headers.get('jwt')
-
-    decoded_jwt = jwt.decode(token, app.config['SECRET_KEY'])
-
-    user = User.query.filter_by(username=decoded_jwt.get('username')).first()
-
-    if not user:
-        return make_response('User not logged in', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
-
-    follow_user = User.query.filter_by(username=data['username']).first()
-
-    if not follow_user:
-        return make_response('Username not found', 404, {'WWW-Authenticate': 'Basic realm="Login required!"'})
-
-    if data['follow']:
-        user.following.append(follow_user)
-    elif not data['follow']:
-        user.following.remove(follow_user)
-    else:
-        return make_response('Bad request', 400, {'WWW-Authenticate': 'Basic realm="Login required!"'})
-
-    try:
-        db.session.commit()
-
-    except SQLAlchemyError as e:
-        error = str(e.__dict__['orig'])
-        return error
-
-    if data['follow']:
-        return make_response(str('Started following ' + data['username']), 200)
-    elif not data['follow']:
-        return make_response(str('Unfollowed ' + data['username']), 200)
+    return following.follow_user(request, db, app.config['SECRET_KEY'])
 
 
 if __name__ == '__main__':
