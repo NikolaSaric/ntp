@@ -6,6 +6,7 @@ import { Token } from '../models/token';
 import { RegisterInfo } from '../models/register-info';
 import { ChangePasswordInfo } from '../models/change-password-info';
 import { User } from '../models/user';
+import { ChangeUserInfo } from '../models/change-user-info';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,14 @@ export class UserService {
     });
 
     return this.http.post<string>(this.constants.userPort + '/user/change-password', changePasswordInfo, { headers });
+  }
+
+  public changeInfo(changeUserInfo: ChangeUserInfo, jwt: string): Observable<User> {
+    const headers: HttpHeaders = new HttpHeaders({
+      jwt
+    });
+
+    return this.http.post<User>(this.constants.userPort + '/user/change-info', changeUserInfo, { headers });
   }
 
   public getUser(username: string): Observable<User> {

@@ -16,7 +16,7 @@
         </mat-card-content>
         <mat-card-actions>
             <button mat-button *ngIf="checkAuthor()" (click)="changePasswordBtnClick()">Change Password</button>
-            <button mat-button *ngIf="checkAuthor()">Edit Info</button>
+            <button mat-button *ngIf="checkAuthor()" (click)="editInfoBtnClick()">Edit Info</button>
             <button mat-button *ngIf="!checkAuthor() && !following" (click)="followBtnClick()">Follow</button>
             <button mat-button *ngIf="!checkAuthor() && following" (click)="unfollowBtnClick()">Unfollow</button>
         </mat-card-actions>
@@ -25,7 +25,7 @@
     <div class="form-wrapper" *ngIf="changePasswordWindow">
         <mat-card class="box">
             <form class="form" [formGroup]="changePasswordForm"
-                (ngSubmit)="changePasswordForm.valid && onChangePasswordubmit()" noval>
+                (ngSubmit)="changePasswordForm.valid && onChangePasswordSubmit()" noval>
                 <mat-card-content>
                     <mat-form-field class="field-full-width">
                         <input matInput formControlName="oldPassword" placeholder="Old Password"
@@ -58,6 +58,37 @@
                 <mat-card-actions>
                     <button mat-button>Change Password</button>
                     <button mat-button (click)="cancelChangePasswordBtnClick()">Cancel</button>
+                </mat-card-actions>
+            </form>
+        </mat-card>
+        <br />
+    </div>
+
+    <div class="form-wrapper" *ngIf="editInfoWindow">
+        <mat-card class="box">
+            <form class="form" [formGroup]="editInfoForm"
+                (ngSubmit)="editInfoForm.valid && editInfoSubmit()" noval>
+                <mat-card-content>
+                    <mat-form-field class="field-full-width">
+                        <input matInput formControlName="fullName" placeholder="Full Name" />
+                        <mat-error>Missing full name.</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="field-full-width">
+                        <input matInput formControlName="email" placeholder="Email" />
+                        <mat-error>Missing email.</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="field-full-width">
+                        <textarea matInput formControlName="description" placeholder="Description">
+                        </textarea>
+                        <mat-error>Max 250 characters.</mat-error>
+                    </mat-form-field>
+
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-button>Edit Info</button>
+                    <button mat-button (click)="cancelEditInfoBtnClick()">Cancel</button>
                 </mat-card-actions>
             </form>
         </mat-card>

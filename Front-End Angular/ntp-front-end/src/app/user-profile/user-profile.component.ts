@@ -6,10 +6,10 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { UserService } from '../services/user.service';
 import { ChangePasswordInfo } from '../models/change-password-info';
+import { ChangeUserInfo } from '../models/change-user-info';
 import { Constants } from '../services/constants';
 import { ActivatedRoute } from '@angular/router';
 import { SearchData } from '../models/search-data';
-import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-user-profile',
@@ -28,6 +28,8 @@ export class UserProfileComponent implements OnInit {
   posts: Post[];
   changePasswordWindow: boolean;
   changePasswordForm: FormGroup;
+  editInfoWindow: boolean;
+  editInfoForm: FormGroup;
   hide = true;
   following: boolean;
 
@@ -72,10 +74,11 @@ export class UserProfileComponent implements OnInit {
 
   changePasswordBtnClick() {
     this.changePasswordForm = this.formBuilder.group({
-      oldPassword: ['', [Validators.required]],
-      newPassword: ['', [Validators.required]],
+      oldPassword: ['', [Validators.required, Validators.min(3)]],
+      newPassword: ['', [Validators.required, Validators.min(3)]],
       repeatedPassword: ['', [Validators.required]]
     });
+    this.cancelEditInfoBtnClick();
     this.changePasswordWindow = true;
   }
 
@@ -84,7 +87,7 @@ export class UserProfileComponent implements OnInit {
     this.changePasswordWindow = false;
   }
 
-  onChangePasswordubmit() {
+  onChangePasswordSubmit() {
     if (this.newPassword !== this.repeatedPassword) {
       this.snackBar.open('New password and repeated password do not much.');
       return;
@@ -102,6 +105,40 @@ export class UserProfileComponent implements OnInit {
     );
 
     this.cancelChangePasswordBtnClick();
+  }
+
+  get fullName() { return this.editInfoForm.controls.fullName.value as string; }
+  get email() { return this.editInfoForm.controls.email.value as string; }
+  get description() { return this.editInfoForm.controls.description.value as string; }
+
+  editInfoBtnClick() {
+    this.editInfoForm = this.formBuilder.group({
+      fullName: ['', [Validators.required, Validators.min(3)]],
+      email: ['', [Validators.required, Validators.min(3)]],
+      description: ['', [Validators.maxLength(250)]]
+    });
+    this.editInfoForm.controls.fullName.setValue(this.user.fullName);
+    this.editInfoForm.controls.email.setValue(this.user.email);
+    this.editInfoForm.controls.description.setValue(this.user.description);
+
+    this.cancelChangePasswordBtnClick();
+    this.editInfoWindow = true;
+  }
+
+  cancelEditInfoBtnClick() {
+    this.editInfoForm = null;
+    this.editInfoWindow = false;
+  }
+
+  editInfoSubmit() {
+    const changeUserInfo = new ChangeUserInfo(this.fullName, this.email, this.description);
+
+    this.userService.changeInfo(changeUserInfo, localStorage.getItem('jwt')).subscribe(
+      (response => {
+        this.user = response;
+        this.snackBar.open('Successfully change user info');
+      })
+    );
   }
 
   deletePost(post: Post) {

@@ -23,6 +23,11 @@ def change_password():
     return user.change_password(request, db, app.config['SECRET_KEY'])
 
 
+@app.route('/user/change-info', methods=['POST'])
+def change_info():
+    return user.change_info(request, db, app.config['SECRET_KEY'])
+
+
 @app.route('/user', methods=['GET'])
 def get_user():
     return user.get_user(request)

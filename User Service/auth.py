@@ -9,6 +9,21 @@ import jwt
 def register(request, db):
     data = request.get_json()
 
+    if len(data['username']) < 3:
+        return make_response('Username must contain at least 3 chars', 400)
+
+    if len(data['password']) < 3:
+        return make_response('Password must contain at least 3 chars', 400)
+
+    if len(data['full_name']) < 3:
+        return make_response('Full name must contain at least 3 chars', 400)
+
+    if len(data['email']) < 3:
+        return make_response('Email must contain at least 3 chars', 400)
+
+    if len(data['description']) > 400:
+        return make_response('Description must not be longer than 400 chars', 400)
+
     hashed_password = generate_password_hash(data['password'], method='SHA256')
 
     new_user = User(username=data['username'], full_name=data['full_name'], password=hashed_password,
