@@ -8,6 +8,9 @@ Web platforma za muzičare, na kojoj mogu da kače svoje video i audio zapise, i
 
 Back-end je baziran na arhitekturi mikroservisa napisanih u Python i GoLang programskim jezicima, a front-end je monolitna Angular aplikacija.
 
+# Demo projekta
+https://www.youtube.com/watch?v=FzQnQwS8Zx0&t=2s&ab_channel=NikolaSaric
+
 # Plan izrade projekta:
 
 1) User servis - Python + Flask mikroservis aplikacija, MySQL baza podataka. Servis za registraciju, prijavljivanje i praćenje korisnika.
